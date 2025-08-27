@@ -2248,7 +2248,7 @@
         }
       }
     },
-    "/api/documents/{id}/": {
+    "/api/documents/{doc_id}/": {
       "get": {
         "operationId": "documents_retrieve",
         "description": "Retrieve a single document",
@@ -2272,7 +2272,7 @@
           },
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2316,7 +2316,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2377,7 +2377,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2437,7 +2437,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2466,14 +2466,14 @@
         }
       }
     },
-    "/api/documents/{id}/download/": {
+    "/api/documents/{doc_id}/download/": {
       "get": {
         "operationId": "documents_download_retrieve",
         "description": "Download the document",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2517,14 +2517,14 @@
         }
       }
     },
-    "/api/documents/{id}/email/": {
+    "/api/documents/{doc_id}/email/": {
       "post": {
         "operationId": "documents_email_create",
         "description": "Email the document to one or more recipients as an attachment.",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2592,14 +2592,14 @@
         }
       }
     },
-    "/api/documents/{id}/history/": {
+    "/api/documents/{doc_id}/history/": {
       "get": {
         "operationId": "documents_history_list",
         "description": "View the document history",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2662,14 +2662,14 @@
         }
       }
     },
-    "/api/documents/{id}/metadata/": {
+    "/api/documents/{doc_id}/metadata/": {
       "get": {
         "operationId": "documents_metadata_retrieve",
         "description": "View the document metadata",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2714,14 +2714,14 @@
         }
       }
     },
-    "/api/documents/{id}/notes/": {
+    "/api/documents/{doc_id}/notes/": {
       "get": {
         "operationId": "documents_notes_list",
         "description": "View, add, or delete notes for the document",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2797,7 +2797,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2893,7 +2893,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -2964,14 +2964,14 @@
         }
       }
     },
-    "/api/documents/{id}/preview/": {
+    "/api/documents/{doc_id}/preview/": {
       "get": {
         "operationId": "documents_preview_retrieve",
         "description": "View the document preview",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -3008,14 +3008,14 @@
         }
       }
     },
-    "/api/documents/{id}/share_links/": {
+    "/api/documents/{doc_id}/share_links/": {
       "get": {
         "operationId": "document_share_links",
         "description": "View share links for the document",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "string"
             },
@@ -3078,14 +3078,14 @@
         }
       }
     },
-    "/api/documents/{id}/suggestions/": {
+    "/api/documents/{doc_id}/suggestions/": {
       "get": {
         "operationId": "documents_suggestions_retrieve",
         "description": "View suggestions for the document",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
@@ -3130,14 +3130,14 @@
         }
       }
     },
-    "/api/documents/{id}/thumb/": {
+    "/api/documents/{doc_id}/thumb/": {
       "get": {
         "operationId": "documents_thumb_retrieve",
         "description": "View the document thumbnail",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "doc_id",
             "schema": {
               "type": "integer"
             },
