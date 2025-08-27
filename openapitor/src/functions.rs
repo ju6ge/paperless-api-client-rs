@@ -98,6 +98,7 @@ fn generate_websocket_fn(
         #[doc = #docs]
         #[tracing::instrument]
         #[cfg(not(target_arch = "wasm32"))]
+        #[allow(non_snake_case)]
         pub async fn #fn_name_ident<'a>(&'a self #args) -> Result<#response_type, crate::types::error::Error> {
             #function_body
         }
@@ -228,6 +229,7 @@ pub fn generate_files(
                 let function = quote! {
                     #[doc = #docs]
                     #[tracing::instrument]
+                    #[allow(non_snake_case)]
                     pub async fn #fn_name_ident<'a>(&'a self #args #request_body) -> Result<#response_type, crate::types::error::Error> {
                         #function_body
                     }
@@ -313,6 +315,7 @@ pub fn generate_files(
                         #[doc = #docs]
                         #[tracing::instrument]
                         #[cfg(not(feature = "js"))]
+                        #[allow(non_snake_case)]
                         pub fn #stream_fn_name_ident<'a>(&'a self #min_args #request_body) -> impl futures::Stream<Item = Result<#item_type, crate::types::error::Error>> + Unpin + '_  {
                             use futures::{StreamExt, TryFutureExt, TryStreamExt};
                             use crate::types::paginate::Pagination;
