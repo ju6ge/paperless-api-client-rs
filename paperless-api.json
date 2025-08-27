@@ -9398,8 +9398,7 @@
           }
         },
         "required": [
-          "field",
-          "value"
+          "field"
         ]
       },
       "CustomFieldInstanceRequest": {
