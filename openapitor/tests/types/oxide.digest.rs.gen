@@ -1,0 +1,58 @@
+#[derive(
+    serde :: Serialize,
+    serde :: Deserialize,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    schemars :: JsonSchema,
+    parse_display :: FromStr,
+    parse_display :: Display,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+pub enum Type {
+    #[serde(rename = "sha256")]
+    #[display("sha256")]
+    Sha256,
+}
+
+impl std::default::Default for Type {
+    fn default() -> Self {
+        Type::Sha256
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+pub struct Digest {
+    #[serde(rename = "type")]
+    pub type_: Type,
+    pub value: String,
+}
+
+impl std::fmt::Display for Digest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for Digest {
+    const LENGTH: usize = 2;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.type_).into(),
+            self.value.clone().into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["type_".into(), "value".into()]
+    }
+}

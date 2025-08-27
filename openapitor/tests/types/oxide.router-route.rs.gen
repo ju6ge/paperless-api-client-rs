@@ -1,0 +1,66 @@
+#[doc = "A route defines a rule that governs where traffic should be sent based on its destination."]
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+pub struct RouterRoute {
+    #[doc = "human-readable free-form text about a resource"]
+    pub description: String,
+    #[doc = "A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.\n\nWhen traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule."]
+    pub destination: RouteDestination,
+    #[doc = "unique, immutable, system-controlled identifier for each resource"]
+    pub id: uuid::Uuid,
+    #[doc = "Describes the kind of router. Set at creation. `read-only`"]
+    pub kind: RouterRouteKind,
+    #[doc = "unique, mutable, user-controlled identifier for each resource"]
+    pub name: String,
+    #[doc = "A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent."]
+    pub target: RouteTarget,
+    #[doc = "timestamp when this resource was created"]
+    pub time_created: chrono::DateTime<chrono::Utc>,
+    #[doc = "timestamp when this resource was last modified"]
+    pub time_modified: chrono::DateTime<chrono::Utc>,
+    #[doc = "The VPC Router to which the route belongs."]
+    pub vpc_router_id: uuid::Uuid,
+}
+
+impl std::fmt::Display for RouterRoute {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for RouterRoute {
+    const LENGTH: usize = 9;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            self.description.clone().into(),
+            format!("{:?}", self.destination).into(),
+            format!("{:?}", self.id).into(),
+            format!("{:?}", self.kind).into(),
+            self.name.clone().into(),
+            format!("{:?}", self.target).into(),
+            format!("{:?}", self.time_created).into(),
+            format!("{:?}", self.time_modified).into(),
+            format!("{:?}", self.vpc_router_id).into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "description".into(),
+            "destination".into(),
+            "id".into(),
+            "kind".into(),
+            "name".into(),
+            "target".into(),
+            "time_created".into(),
+            "time_modified".into(),
+            "vpc_router_id".into(),
+        ]
+    }
+}
