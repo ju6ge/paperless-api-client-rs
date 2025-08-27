@@ -796,6 +796,7 @@ impl TypeSpace {
         let rendered = quote! {
             #description
             #[derive(serde::Serialize, serde::Deserialize, PartialEq, Debug, Clone, schemars::JsonSchema)]
+            #[allow(non_snake_case)]
             pub struct #struct_name {
                 #values
             }
