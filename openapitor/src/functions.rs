@@ -1159,7 +1159,8 @@ fn generate_auth_code(opts: &crate::Opts) -> Result<TokenStream> {
     } else if opts.basic_auth {
         quote!(req = req.basic_auth(&self.client.username, Some(&self.client.password));)
     } else {
-        quote!(req = req.bearer_auth(&self.client.token);)
+        //quote!(req = req.bearer_auth(&self.client.token);)
+        quote!(req = req.header("Authorization", format!("Token {}", &self.client.token));)
     };
     Ok(out)
 }
