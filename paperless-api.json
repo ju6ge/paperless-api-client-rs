@@ -9374,22 +9374,6 @@
         "type": "object",
         "properties": {
           "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "integer"
-              },
-              {
-                "type": "number",
-                "format": "double"
-              },
-              {
-                "type": "object",
-                "additionalProperties": {}
-              }
-            ],
             "nullable": true,
             "description": "Given the *incoming* primitive data, return the value for this field\nthat should be validated and transformed to a native value."
           },
@@ -9405,22 +9389,6 @@
         "type": "object",
         "properties": {
           "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "integer"
-              },
-              {
-                "type": "number",
-                "format": "double"
-              },
-              {
-                "type": "object",
-                "additionalProperties": {}
-              }
-            ],
             "nullable": true,
             "description": "Given the *incoming* primitive data, return the value for this field\nthat should be validated and transformed to a native value."
           },
