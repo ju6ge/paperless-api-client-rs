@@ -670,7 +670,7 @@ impl TypeSpace {
             let next_page_str = pagination_properties.next_page_str()?;
             let next_page_ident = format_ident!("{}", next_page_str);
 
-            if next_page_str == "next_link" {
+            if next_page_str == "next_link" ||  next_page_str == "next"{
                 pagination = quote!(
                     #[cfg(feature = "requests")]
                     impl crate::types::paginate::Pagination for #struct_name {
@@ -686,8 +686,8 @@ impl TypeSpace {
 
                         fn next_page(&self, req: reqwest::Request) -> anyhow::Result<reqwest::Request, crate::types::error::Error> {
                             let mut req = req.try_clone().ok_or_else(|| crate::types::error::Error::InvalidRequest(format!("failed to clone request: {:?}", req)))?;
-                            *req.url_mut() = url::Url::parse( self.next_link.as_deref().unwrap_or(""))
-                                .map_err(|_| crate::types::error::Error::InvalidRequest(format!("failed to parse url: {:?}", self.next_link)))?;
+                            *req.url_mut() = url::Url::parse( self.#next_page_ident.as_deref().unwrap_or(""))
+                                .map_err(|_| crate::types::error::Error::InvalidRequest(format!("failed to parse url: {:?}", self.#next_page_ident)))?;
 
                             Ok(req)
                         }
