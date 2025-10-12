@@ -13936,7 +13936,8 @@
           },
           "document_count": {
             "type": "integer",
-            "readOnly": true
+            "readOnly": true,
+            "default": 0
           },
           "owner": {
             "type": "integer",
