@@ -82,7 +82,7 @@ fn get_env_variable_code_basic_auth(opts: &crate::Opts) -> String {
     };
 
     format!(
-        r#"{}
+        r#"{start}
 
 
     let mut c = Client::new(
@@ -91,8 +91,7 @@ fn get_env_variable_code_basic_auth(opts: &crate::Opts) -> String {
     );
     c.set_base_url(base_url);
     c
-    "#,
-        start
+    "#
     )
 }
 
@@ -269,7 +268,7 @@ fn get_env_variable_code_token(opts: &crate::Opts) -> String {
     };
 
     format!(
-        r#"{}
+        r#"{start}
 
 
     let mut c = Client::new(
@@ -277,8 +276,7 @@ fn get_env_variable_code_token(opts: &crate::Opts) -> String {
     );
     c.set_base_url(base_url);
     c
-    "#,
-        start
+    "#
     )
 }
 
@@ -577,14 +575,13 @@ fn get_env_variable_code_oauth_token(opts: &crate::Opts) -> String {
     };
 
     format!(
-        r#"{}
+        r#"{start}
 
     
     let mut c = Client::new(client_id, client_secret, redirect_uri, token, refresh_token);
     c.set_base_url(base_url);
     c
-    "#,
-        start
+    "#
     )
 }
 

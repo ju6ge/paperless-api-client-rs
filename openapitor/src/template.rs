@@ -13,7 +13,7 @@ fn generate_docs_openapi_info(spec: &openapiv3::OpenAPI, opts: &crate::Opts) -> 
 
     let mut tos = String::new();
     if let Some(t) = &spec.info.terms_of_service {
-        tos = format!("[API Terms of Service]({})", t);
+        tos = format!("[API Terms of Service]({t})");
     }
 
     let mut contact = String::new();
@@ -40,9 +40,8 @@ fn generate_docs_openapi_info(spec: &openapiv3::OpenAPI, opts: &crate::Opts) -> 
         if !contact.is_empty() {
             contact.push('|');
             contact = format!(
-                r#"//! {}
-//! "#,
-                contact
+                r#"//! {contact}
+//! "#
             );
             for _ in 1..num {
                 contact.push_str("|----");
@@ -51,19 +50,19 @@ fn generate_docs_openapi_info(spec: &openapiv3::OpenAPI, opts: &crate::Opts) -> 
         }
 
         if !name.is_empty() {
-            write!(contact, "| {} ", name)?;
+            write!(contact, "| {name} ")?;
         }
         if !url.is_empty() {
-            write!(contact, "| <{}> ", url)?;
+            write!(contact, "| <{url}> ")?;
         }
         if !email.is_empty() {
-            write!(contact, "| {} ", email)?;
+            write!(contact, "| {email} ")?;
         }
         if !contact.is_empty() {
             contact.push_str("|\n//! ");
         }
 
-        contact = format!("### Contact\n//!\n//! \n{}", contact);
+        contact = format!("### Contact\n//!\n//! \n{contact}");
     }
 
     let mut license = String::new();
@@ -77,9 +76,8 @@ fn generate_docs_openapi_info(spec: &openapiv3::OpenAPI, opts: &crate::Opts) -> 
         }
         license.push('|');
         license = format!(
-            r#"//! {}
-//! "#,
-            license
+            r#"//! {license}
+//! "#
         );
 
         license.push_str("|----");
@@ -90,20 +88,19 @@ fn generate_docs_openapi_info(spec: &openapiv3::OpenAPI, opts: &crate::Opts) -> 
 
         write!(license, "| {} ", l.name)?;
         if !url.is_empty() {
-            write!(license, "| <{}> ", url)?;
+            write!(license, "| <{url}> ")?;
         }
         license.push_str("|\n//! ");
 
-        license = format!("### License\n//!\n//! \n{}", license);
+        license = format!("### License\n//!\n//! \n{license}");
     }
 
     let api_version = format!("based on API spec version `{}`", spec.info.version);
 
     let spec_link_blurb = if let Some(link) = &opts.spec_url {
         format!(
-            "This client is generated from the [OpenAPI specs]({}) {}. This way it will remain up \
-             to date as features are added.",
-            link, api_version
+            "This client is generated from the [OpenAPI specs]({link}) {api_version}. This way it will remain up \
+             to date as features are added."
         )
     } else {
         "".to_string()
@@ -341,7 +338,7 @@ pub fn generate_utils(opts: &crate::Opts) -> Option<String> {
 pub mod date_time_format {{
     use chrono::{{DateTime, NaiveDateTime, Utc}};
     use serde::{{self, Deserialize, Deserializer}};
-    const FORMAT: &str = "{format}";
+    const FORMAT: &str = "{date_time_format}";
     // The signature of a deserialize_with function must follow the pattern:
     //
     //    fn deserialize<'de, D>(D) -> Result<T, D::Error>
@@ -371,7 +368,7 @@ pub mod date_time_format {{
 pub mod nullable_date_time_format {{
     use chrono::{{DateTime, NaiveDateTime, Utc}};
     use serde::{{self, Deserialize, Deserializer}};
-    const FORMAT: &str = "{format}";
+    const FORMAT: &str = "{date_time_format}";
     // The signature of a deserialize_with function must follow the pattern:
     //
     //    fn deserialize<'de, D>(D) -> Result<T, D::Error>
@@ -404,6 +401,5 @@ pub mod nullable_date_time_format {{
 }}
 
 "#,
-        format = date_time_format,
     )})
 }

@@ -78,7 +78,7 @@ impl std::fmt::Display for PhoneNumber {
         } else {
             String::new()
         };
-        write!(f, "{}", s)
+        write!(f, "{s}")
     }
 }
 

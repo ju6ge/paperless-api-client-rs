@@ -32,7 +32,7 @@ static LEADING_SPACES: Lazy<Regex> = Lazy::new(|| Regex::new(r"\n +").unwrap());
 pub fn sanitize_indents(s: &str, name: String) -> std::borrow::Cow<'_, str> {
     let new_str = LEADING_SPACES.replace_all(s, "\n");
     if new_str.is_empty() {
-        format!("{}.", name).into()
+        format!("{name}.").into()
     } else {
         new_str
     }
@@ -142,7 +142,7 @@ pub fn generate_types(spec: &openapiv3::OpenAPI, opts: crate::Opts) -> Result<Ty
             if let Some(openapiv3::ReferenceOr::Item(i)) = content.schema {
                 // If the schema is a reference we don't care, since we would have already rendered
                 // that reference.
-                schemas.push((format!("{}_{}", name, content_name), i));
+                schemas.push((format!("{name}_{content_name}"), i));
             }
         }
     }
@@ -153,7 +153,7 @@ pub fn generate_types(spec: &openapiv3::OpenAPI, opts: crate::Opts) -> Result<Ty
             if let Some(openapiv3::ReferenceOr::Item(i)) = content.schema {
                 // If the schema is a reference we don't care, since we would have already rendered
                 // that reference.
-                schemas.push((format!("{}_{}", name, content_name), i));
+                schemas.push((format!("{name}_{content_name}"), i));
             }
         }
     }
@@ -609,19 +609,11 @@ impl TypeSpace {
         data: &openapiv3::SchemaData,
     ) -> Result<()> {
         if let Some(min_properties) = o.min_properties {
-            log::warn!(
-                "min properties not supported for objects: {} => {:?}",
-                name,
-                min_properties
-            );
+            log::warn!("min properties not supported for objects: {name} => {min_properties:?}");
         }
 
         if let Some(max_properties) = o.max_properties {
-            log::warn!(
-                "max properties not supported for objects: {} => {:?}",
-                name,
-                max_properties
-            );
+            log::warn!("max properties not supported for objects: {name} => {max_properties:?}");
         }
 
         // Get the proper name version of the name of the object.
@@ -670,7 +662,7 @@ impl TypeSpace {
             let next_page_str = pagination_properties.next_page_str()?;
             let next_page_ident = format_ident!("{}", next_page_str);
 
-            if next_page_str == "next_link" ||  next_page_str == "next"{
+            if next_page_str == "next_link" || next_page_str == "next" {
                 pagination = quote!(
                     #[cfg(feature = "requests")]
                     impl crate::types::paginate::Pagination for #struct_name {
@@ -864,7 +856,7 @@ impl TypeSpace {
                 // Make sure there isn't an existing reference with this name.
                 let mut t = if let Some(components) = &self.spec.components {
                     if components.schemas.contains_key(&proper_name(&prop)) {
-                        proper_name(&format!("{} {}", struct_name, prop))
+                        proper_name(&format!("{struct_name} {prop}"))
                     } else {
                         proper_name(&prop)
                     }
@@ -887,7 +879,7 @@ impl TypeSpace {
                     }
                     if *rendered != *compare_inner_schema {
                         // The name is already taken, so we need to make a new name.
-                        t = proper_name(&format!("{} {}", struct_name, prop));
+                        t = proper_name(&format!("{struct_name} {prop}"));
                     } else {
                         // When the schema exists but it is equal to the current schema,
                         // we don't need to render it. AND we can use the existing name.
@@ -953,7 +945,8 @@ impl TypeSpace {
             }
             if !o.required.contains(k)
                 && is_default_property(&type_name, &inner_schema.schema_data)?
-                && !type_name.is_option()? && !already_has_default
+                && !type_name.is_option()?
+                && !already_has_default
             {
                 serde_props.push(quote!(default));
             }
@@ -1024,19 +1017,11 @@ impl TypeSpace {
         }
 
         if let Some(ref max_length) = s.max_length {
-            log::warn!(
-                "XXX max_length not supported here yet: {} => {:?}",
-                name,
-                max_length
-            );
+            log::warn!("XXX max_length not supported here yet: {name} => {max_length:?}");
         }
 
         if let Some(ref min_length) = s.min_length {
-            log::warn!(
-                "XXX min_length not supported here yet: {} => {:?}",
-                name,
-                min_length
-            );
+            log::warn!("XXX min_length not supported here yet: {name} => {min_length:?}");
         }
 
         // We don't render primitives yet.
@@ -1279,7 +1264,7 @@ impl TypeSpace {
                     }
 
                     if let Some(content) = &tag_result.content {
-                        let content_type_name = proper_name(&format!("{}_{}", tag_name, content));
+                        let content_type_name = proper_name(&format!("{tag_name}_{content}"));
                         // Get the value of the content.
                         let content_schema = match o.properties.get(content) {
                             Some(v) => v,
@@ -1547,7 +1532,7 @@ pub fn get_type_name_for_schema(
             if let Some(s) = get_schema_from_any(&schema.schema_data, any) {
                 return get_type_name_for_schema(name, &s, spec, in_crate);
             }
-            log::warn!("got any schema kind `{}`: {:?}", name, any);
+            log::warn!("got any schema kind `{name}`: {any:?}");
             quote!(serde_json::Value)
         }
     };
@@ -2001,7 +1986,7 @@ pub fn clean_property_name(s: &str) -> String {
         || prop == "async"
         || prop == "in"
     {
-        prop = format!("{}_", prop);
+        prop = format!("{prop}_");
     } else if prop == "$ref" || prop == "$type" {
         // Account for any weird types.
         prop = format!("{}_", prop.replace('$', ""));

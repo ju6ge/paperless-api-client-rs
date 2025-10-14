@@ -218,12 +218,11 @@ pub fn generate_files(
                 // We want the code to comile but not be run as there are functions that
                 // would delete our user etc.
                 let docs = format!(
-                    r#"{}
+                    r#"{docs}
 
 ```rust,no_run
-{}
-```"#,
-                    docs, rust_doc_example_code_fn
+{rust_doc_example_code_fn}
+```"#
                 );
 
                 let function = quote! {
@@ -452,7 +451,7 @@ fn generate_docs(
     let mut docs = if let Some(summary) = &op.summary {
         summary.to_string()
     } else {
-        format!("Perform a `{}` request to `{}`.", method, name)
+        format!("Perform a `{method}` request to `{name}`.")
     };
 
     if let Some(description) = &op.description {
@@ -597,10 +596,10 @@ fn generate_name_for_fn_schema(
     }
 
     if let Some(operation_id) = &op.operation_id {
-        return format!("{} {}", operation_id, addition);
+        return format!("{operation_id} {addition}");
     }
 
-    format!("{} {} {}", name, method, addition)
+    format!("{name} {method} {addition}")
 }
 
 /// Return the function arguments for the operation.
@@ -1067,7 +1066,7 @@ fn clean_url_from(path_params: &BTreeMap<String, TokenStream>) -> Result<TokenSt
     }
     let mut clean_string = quote!();
     for (name, t) in path_params {
-        let url_string = format!("{{{}}}", name);
+        let url_string = format!("{{{name}}}");
         let cleaned_name = crate::types::clean_property_name(name);
         let name_ident = format_ident!("{}", cleaned_name);
 
