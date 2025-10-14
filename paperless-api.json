@@ -9596,7 +9596,8 @@
           },
           "user_can_change": {
             "type": "boolean",
-            "readOnly": true
+            "readOnly": true,
+            "nullable": true
           },
           "is_shared_by_requester": {
             "type": "boolean",
