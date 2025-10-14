@@ -940,13 +940,20 @@ impl TypeSpace {
                 ));
             }
 
+            let mut already_has_default = false;
+
             if type_name.is_option()? {
                 serde_props.push(quote!(default));
                 serde_props.push(quote!(skip_serializing_if = "Option::is_none"));
+                already_has_default = true;
+            } else if let Some(_default) = &inner_schema.schema_data.default {
+                log::warn!("setting default values for fields to specific values is unsupported, defaulting to using field type rust default value");
+                serde_props.push(quote!(default));
+                already_has_default = true;
             }
             if !o.required.contains(k)
                 && is_default_property(&type_name, &inner_schema.schema_data)?
-                && !type_name.is_option()?
+                && !type_name.is_option()? && !already_has_default
             {
                 serde_props.push(quote!(default));
             }
