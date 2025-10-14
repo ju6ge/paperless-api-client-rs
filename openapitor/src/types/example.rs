@@ -487,7 +487,7 @@ pub fn generate_example_rust_from_schema(
                                 {
                                     // Update the name of the type.
                                     t_name = crate::types::get_type_name_for_schema(
-                                        &format!("{} {}", name, k),
+                                        &format!("{name} {k}"),
                                         s,
                                         &type_space.spec,
                                         true,

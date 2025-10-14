@@ -564,14 +564,14 @@ impl OperationExt for openapiv3::Operation {
 /// Remove any stutters with a string.
 fn remove_stutters(whole: &str, s: &str) -> String {
     let mut whole = whole.to_string();
-    if whole.starts_with(&format!("{}_", s)) {
-        whole = whole.trim_start_matches(&format!("{}_", s)).to_string();
+    if whole.starts_with(&format!("{s}_")) {
+        whole = whole.trim_start_matches(&format!("{s}_")).to_string();
     }
-    if whole.ends_with(&format!("_{}", s)) {
-        whole = whole.trim_end_matches(&format!("_{}", s)).to_string();
+    if whole.ends_with(&format!("_{s}")) {
+        whole = whole.trim_end_matches(&format!("_{s}")).to_string();
     }
-    if whole.contains(&format!("_{}_", s)) {
-        whole = whole.replace(&format!("_{}_", s), "_");
+    if whole.contains(&format!("_{s}_")) {
+        whole = whole.replace(&format!("_{s}_"), "_");
     }
 
     whole

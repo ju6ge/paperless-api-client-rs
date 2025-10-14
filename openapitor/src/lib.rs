@@ -310,7 +310,7 @@ pub fn generate(spec: &openapiv3::OpenAPI, opts: &Opts) -> Result<()> {
     }
 
     // Create the Rust source file containing the generated client.
-    let lib = format!("{}\n{}", docs, out);
+    let lib = format!("{docs}\n{out}");
     let mut librs = src.clone();
     librs.push("lib.rs");
     crate::save(librs, lib.as_str())?;
@@ -329,7 +329,7 @@ pub fn generate(spec: &openapiv3::OpenAPI, opts: &Opts) -> Result<()> {
     // We have a map of our files, let's write to them.
     for (f, content) in files {
         let mut tagrs = src.clone();
-        tagrs.push(format!("{}.rs", f));
+        tagrs.push(format!("{f}.rs"));
         let proper_tag_name = crate::types::proper_name(&f);
         let proper_tag_name_ident = format_ident!("{}", proper_tag_name);
 
@@ -567,10 +567,7 @@ fn generate_cargo_toml(opts: &Opts) -> String {
             opts.output.display().to_string()
         };
 
-        format!(
-            r#"repository = "https://github.com/{}/tree/main/{}""#,
-            repo, output
-        )
+        format!(r#"repository = "https://github.com/{repo}/tree/main/{output}""#)
     } else {
         "".to_string()
     };

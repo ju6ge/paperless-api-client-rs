@@ -97,26 +97,26 @@ impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::InvalidRequest(s) => {
-                write!(f, "Invalid Request: {}", s)
+                write!(f, "Invalid Request: {s}")
             }
             #[cfg(feature = "retry")]
             Error::CommunicationError(e) => {
-                write!(f, "Communication Error: {}", e)
+                write!(f, "Communication Error: {e}")
             }
             Error::RequestError(e) => {
-                write!(f, "Request Error: {}", e)
+                write!(f, "Request Error: {e}")
             }
             Error::SerdeError { error, status: _ } => {
-                write!(f, "Serde Error: {}", error)
+                write!(f, "Serde Error: {error}")
             }
             Error::InvalidResponsePayload { error, response: _ } => {
-                write!(f, "Invalid Response Payload: {}", error)
+                write!(f, "Invalid Response Payload: {error}")
             }
             Error::Server { body, status } => {
-                write!(f, "Server Error: {} {}", status, body)
+                write!(f, "Server Error: {status} {body}")
             }
             Error::UnexpectedResponse(r) => {
-                write!(f, "Unexpected Response: {:?}", r)
+                write!(f, "Unexpected Response: {r:?}")
             }
         }
     }
