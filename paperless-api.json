@@ -9601,7 +9601,8 @@
           },
           "is_shared_by_requester": {
             "type": "boolean",
-            "readOnly": true
+            "readOnly": true,
+            "nullable": true
           },
           "notes": {
             "type": "array",
