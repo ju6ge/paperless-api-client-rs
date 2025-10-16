@@ -936,7 +936,9 @@ impl TypeSpace {
 
             if type_name.is_option()? {
                 serde_props.push(quote!(default));
-                serde_props.push(quote!(skip_serializing_if = "Option::is_none"));
+                if !o.required.contains(&prop){
+                    serde_props.push(quote!(skip_serializing_if = "Option::is_none"));
+                }
                 already_has_default = true;
             } else if let Some(_default) = &inner_schema.schema_data.default {
                 log::warn!("setting default values for fields to specific values is unsupported, defaulting to using field type rust default value");
