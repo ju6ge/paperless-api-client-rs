@@ -3,6 +3,7 @@ name = "paperless-api-client"
 description = "Paperless-ngx API client"
 version = "6.0.0"
 documentation = "https://docs.rs/paperless-api-client"
+repository = "https://github.com/ju6ge/paperless-api-client-rs"
 readme = "README.md"
 
 edition = "2021"
