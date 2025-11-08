@@ -9302,6 +9302,7 @@
           },
           "permissions": {
             "type": "object",
+            "nullable": true,
             "properties": {
               "view": {
                 "type": "object",
@@ -9349,7 +9350,6 @@
           "document_count",
           "id",
           "name",
-          "permissions",
           "slug",
           "user_can_change"
         ]
