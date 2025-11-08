@@ -9293,6 +9293,7 @@
           "last_correspondence": {
             "type": "string",
             "format": "date",
+            "nullable": true,
             "readOnly": true
           },
           "owner": {
@@ -9347,7 +9348,6 @@
         "required": [
           "document_count",
           "id",
-          "last_correspondence",
           "name",
           "permissions",
           "slug",
