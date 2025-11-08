@@ -1792,7 +1792,8 @@ pub struct Correspondent {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
-    pub last_correspondence: chrono::NaiveDate,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub last_correspondence: Option<chrono::NaiveDate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     pub permissions: Permissions,
@@ -1833,7 +1834,11 @@ impl tabled::Tabled for Correspondent {
                 String::new().into()
             },
             format!("{:?}", self.document_count).into(),
-            format!("{:?}", self.last_correspondence).into(),
+            if let Some(last_correspondence) = &self.last_correspondence {
+                format!("{last_correspondence:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(owner) = &self.owner {
                 format!("{owner:?}").into()
             } else {
