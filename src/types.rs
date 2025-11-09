@@ -1792,10 +1792,12 @@ pub struct Correspondent {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
-    pub last_correspondence: chrono::NaiveDate,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub last_correspondence: Option<chrono::NaiveDate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
-    pub permissions: Permissions,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Permissions>,
     pub user_can_change: bool,
 }
 
@@ -1833,13 +1835,21 @@ impl tabled::Tabled for Correspondent {
                 String::new().into()
             },
             format!("{:?}", self.document_count).into(),
-            format!("{:?}", self.last_correspondence).into(),
+            if let Some(last_correspondence) = &self.last_correspondence {
+                format!("{last_correspondence:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(owner) = &self.owner {
                 format!("{owner:?}").into()
             } else {
                 String::new().into()
             },
-            format!("{:?}", self.permissions).into(),
+            if let Some(permissions) = &self.permissions {
+                format!("{permissions:?}").into()
+            } else {
+                String::new().into()
+            },
             format!("{:?}", self.user_can_change).into(),
         ]
     }
@@ -2339,6 +2349,50 @@ pub enum DisplayModeEnum {
     Empty,
 }
 
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct DocumentPermissions {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub view: Option<View>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub change: Option<Change>,
+}
+
+impl std::fmt::Display for DocumentPermissions {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for DocumentPermissions {
+    const LENGTH: usize = 2;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            if let Some(view) = &self.view {
+                format!("{view:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(change) = &self.change {
+                format!("{change:?}").into()
+            } else {
+                String::new().into()
+            },
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["view".into(), "change".into()]
+    }
+}
+
 #[doc = "Adds update nested feature"]
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
@@ -2377,7 +2431,7 @@ pub struct Document {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Permissions>,
+    pub permissions: Option<DocumentPermissions>,
     #[serde(default)]
     pub user_can_change: Option<bool>,
     #[serde(default)]
@@ -2660,6 +2714,50 @@ impl tabled::Tabled for DocumentRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
+pub struct DocumentTypePermissions {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub view: Option<View>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub change: Option<Change>,
+}
+
+impl std::fmt::Display for DocumentTypePermissions {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for DocumentTypePermissions {
+    const LENGTH: usize = 2;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            if let Some(view) = &self.view {
+                format!("{view:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(change) = &self.change {
+                format!("{change:?}").into()
+            } else {
+                String::new().into()
+            },
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["view".into(), "change".into()]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
 pub struct DocumentType {
     pub id: i64,
     pub slug: String,
@@ -2673,7 +2771,7 @@ pub struct DocumentType {
     pub document_count: i64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
-    pub permissions: Permissions,
+    pub permissions: DocumentTypePermissions,
     pub user_can_change: bool,
 }
 

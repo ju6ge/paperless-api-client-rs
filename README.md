@@ -25,7 +25,7 @@ To install the library, add the following to your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-paperless-api-client = "6.0.0"
+paperless-api-client = "6.0.1"
 ```
 
 ## Basic example
