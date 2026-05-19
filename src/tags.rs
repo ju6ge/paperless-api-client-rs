@@ -11,7 +11,7 @@ impl Tags {
         Self { client }
     }
 
-    #[doc = "Perform a `GET` request to `/api/tags/`.\n\n**Parameters:**\n\n- `full_perms: Option<bool>`\n- `id: Option<i64>`\n- `id_in: Option<Vec<i64>>`: Multiple values may be separated by commas.\n- `name_icontains: Option<String>`\n- `name_iendswith: Option<String>`\n- `name_iexact: Option<String>`\n- `name_istartswith: Option<String>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_tags_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut tags = client.tags();\n    let mut stream = tags.list_stream(\n        Some(true),\n        Some(4 as i64),\n        Some(vec![4 as i64]),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/tags/`.\n\nBuild a children map once to avoid per-parent queries in the serializer.\n\n**Parameters:**\n\n- `full_perms: Option<bool>`\n- `id: Option<i64>`\n- `id_in: Option<Vec<i64>>`: Multiple values may be separated by commas.\n- `is_root: Option<bool>`: Is root tag\n- `name_icontains: Option<String>`\n- `name_iendswith: Option<String>`\n- `name_iexact: Option<String>`\n- `name_istartswith: Option<String>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_tags_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut tags = client.tags();\n    let mut stream = tags.list_stream(\n        Some(true),\n        Some(4 as i64),\n        Some(vec![4 as i64]),\n        Some(true),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn list<'a>(
@@ -19,6 +19,7 @@ impl Tags {
         full_perms: Option<bool>,
         id: Option<i64>,
         id_in: Option<Vec<i64>>,
+        is_root: Option<bool>,
         name_icontains: Option<String>,
         name_iendswith: Option<String>,
         name_iexact: Option<String>,
@@ -43,6 +44,10 @@ impl Tags {
 
         if let Some(p) = id_in {
             query_params.push(("id__in", itertools::join(p, ",")));
+        }
+
+        if let Some(p) = is_root {
+            query_params.push(("is_root", format!("{p}")));
         }
 
         if let Some(p) = name_icontains {
@@ -93,7 +98,7 @@ impl Tags {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/tags/`.\n\n**Parameters:**\n\n- `full_perms: Option<bool>`\n- `id: Option<i64>`\n- `id_in: Option<Vec<i64>>`: Multiple values may be separated by commas.\n- `name_icontains: Option<String>`\n- `name_iendswith: Option<String>`\n- `name_iexact: Option<String>`\n- `name_istartswith: Option<String>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_tags_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut tags = client.tags();\n    let mut stream = tags.list_stream(\n        Some(true),\n        Some(4 as i64),\n        Some(vec![4 as i64]),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/tags/`.\n\nBuild a children map once to avoid per-parent queries in the serializer.\n\n**Parameters:**\n\n- `full_perms: Option<bool>`\n- `id: Option<i64>`\n- `id_in: Option<Vec<i64>>`: Multiple values may be separated by commas.\n- `is_root: Option<bool>`: Is root tag\n- `name_icontains: Option<String>`\n- `name_iendswith: Option<String>`\n- `name_iexact: Option<String>`\n- `name_istartswith: Option<String>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_tags_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut tags = client.tags();\n    let mut stream = tags.list_stream(\n        Some(true),\n        Some(4 as i64),\n        Some(vec![4 as i64]),\n        Some(true),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[cfg(not(feature = "js"))]
     #[allow(non_snake_case)]
@@ -102,6 +107,7 @@ impl Tags {
         full_perms: Option<bool>,
         id: Option<i64>,
         id__in: Option<Vec<i64>>,
+        is_root: Option<bool>,
         name__icontains: Option<String>,
         name__iendswith: Option<String>,
         name__iexact: Option<String>,
@@ -116,6 +122,7 @@ impl Tags {
             full_perms,
             id,
             id__in,
+            is_root,
             name__icontains,
             name__iendswith,
             name__iexact,

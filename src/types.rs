@@ -7431,6 +7431,8 @@ pub struct PatchedTagRequest {
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
 }
 
 impl std::fmt::Display for PatchedTagRequest {
@@ -7445,7 +7447,7 @@ impl std::fmt::Display for PatchedTagRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for PatchedTagRequest {
-    const LENGTH: usize = 8;
+    const LENGTH: usize = 9;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(name) = &self.name {
@@ -7488,6 +7490,11 @@ impl tabled::Tabled for PatchedTagRequest {
             } else {
                 String::new().into()
             },
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
+            } else {
+                String::new().into()
+            },
         ]
     }
 
@@ -7501,6 +7508,7 @@ impl tabled::Tabled for PatchedTagRequest {
             "is_inbox_tag".into(),
             "owner".into(),
             "set_permissions".into(),
+            "parent".into(),
         ]
     }
 }
@@ -9562,6 +9570,9 @@ pub struct Tag {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     pub user_can_change: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
+    pub children: Vec<i64>,
 }
 
 impl std::fmt::Display for Tag {
@@ -9576,7 +9587,7 @@ impl std::fmt::Display for Tag {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for Tag {
-    const LENGTH: usize = 12;
+    const LENGTH: usize = 14;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             format!("{:?}", self.id).into(),
@@ -9615,6 +9626,12 @@ impl tabled::Tabled for Tag {
                 String::new().into()
             },
             format!("{:?}", self.user_can_change).into(),
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
+            } else {
+                String::new().into()
+            },
+            format!("{:?}", self.children).into(),
         ]
     }
 
@@ -9632,6 +9649,8 @@ impl tabled::Tabled for Tag {
             "document_count".into(),
             "owner".into(),
             "user_can_change".into(),
+            "parent".into(),
+            "children".into(),
         ]
     }
 }
@@ -9691,6 +9710,8 @@ pub struct TagRequest {
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
 }
 
 impl std::fmt::Display for TagRequest {
@@ -9705,7 +9726,7 @@ impl std::fmt::Display for TagRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for TagRequest {
-    const LENGTH: usize = 8;
+    const LENGTH: usize = 9;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             self.name.clone().into(),
@@ -9741,6 +9762,11 @@ impl tabled::Tabled for TagRequest {
             },
             if let Some(set_permissions) = &self.set_permissions {
                 format!("{set_permissions:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
             } else {
                 String::new().into()
             },
