@@ -352,43 +352,6 @@ impl ShareLinks {
         }
     }
 
-    #[doc = "Perform a `PUT` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_update() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .update(\n            4 as i64,\n            &paperless_api_client::types::ShareLinkRequest {\n                expiration: Some(chrono::Utc::now()),\n                document: Some(4 as i64),\n                file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
-    #[tracing::instrument]
-    #[allow(non_snake_case)]
-    pub async fn update<'a>(
-        &'a self,
-        id: i64,
-        body: &crate::types::ShareLinkRequest,
-    ) -> Result<crate::types::ShareLink, crate::types::error::Error> {
-        let mut req = self.client.client.request(
-            http::Method::PUT,
-            format!(
-                "{}/{}",
-                self.client.base_url,
-                "api/share_links/{id}/".replace("{id}", &format!("{id}"))
-            ),
-        );
-        req = req.header("Authorization", format!("Token {}", &self.client.token));
-        req = req.json(body);
-        let resp = req.send().await?;
-        let status = resp.status();
-        if status.is_success() {
-            let text = resp.text().await.unwrap_or_default();
-            serde_json::from_str(&text).map_err(|err| {
-                crate::types::error::Error::from_serde_error(
-                    format_serde_error::SerdeError::new(text.to_string(), err),
-                    status,
-                )
-            })
-        } else {
-            let text = resp.text().await.unwrap_or_default();
-            Err(crate::types::error::Error::Server {
-                body: text.to_string(),
-                status,
-            })
-        }
-    }
-
     #[doc = "Perform a `DELETE` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_destroy() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    client.share_links().destroy(4 as i64).await?;\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
@@ -406,43 +369,6 @@ impl ShareLinks {
         let status = resp.status();
         if status.is_success() {
             Ok(())
-        } else {
-            let text = resp.text().await.unwrap_or_default();
-            Err(crate::types::error::Error::Server {
-                body: text.to_string(),
-                status,
-            })
-        }
-    }
-
-    #[doc = "Perform a `PATCH` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_partial_update() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .partial_update(\n            4 as i64,\n            &paperless_api_client::types::PatchedShareLinkRequest {\n                expiration: Some(chrono::Utc::now()),\n                document: Some(4 as i64),\n                file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
-    #[tracing::instrument]
-    #[allow(non_snake_case)]
-    pub async fn partial_update<'a>(
-        &'a self,
-        id: i64,
-        body: &crate::types::PatchedShareLinkRequest,
-    ) -> Result<crate::types::ShareLink, crate::types::error::Error> {
-        let mut req = self.client.client.request(
-            http::Method::PATCH,
-            format!(
-                "{}/{}",
-                self.client.base_url,
-                "api/share_links/{id}/".replace("{id}", &format!("{id}"))
-            ),
-        );
-        req = req.header("Authorization", format!("Token {}", &self.client.token));
-        req = req.json(body);
-        let resp = req.send().await?;
-        let status = resp.status();
-        if status.is_success() {
-            let text = resp.text().await.unwrap_or_default();
-            serde_json::from_str(&text).map_err(|err| {
-                crate::types::error::Error::from_serde_error(
-                    format_serde_error::SerdeError::new(text.to_string(), err),
-                    status,
-                )
-            })
         } else {
             let text = resp.text().await.unwrap_or_default();
             Err(crate::types::error::Error::Server {

@@ -7148,62 +7148,6 @@ impl tabled::Tabled for PatchedSavedViewRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct PatchedShareLinkRequest {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub expiration: Option<chrono::DateTime<chrono::Utc>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub document: Option<i64>,
-    #[doc = "* `archive` - Archive\n* `original` - Original"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub file_version: Option<FileVersionEnum>,
-}
-
-impl std::fmt::Display for PatchedShareLinkRequest {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        write!(
-            f,
-            "{}",
-            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
-        )
-    }
-}
-
-#[cfg(feature = "tabled")]
-impl tabled::Tabled for PatchedShareLinkRequest {
-    const LENGTH: usize = 3;
-    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
-        vec![
-            if let Some(expiration) = &self.expiration {
-                format!("{expiration:?}").into()
-            } else {
-                String::new().into()
-            },
-            if let Some(document) = &self.document {
-                format!("{document:?}").into()
-            } else {
-                String::new().into()
-            },
-            if let Some(file_version) = &self.file_version {
-                format!("{file_version:?}").into()
-            } else {
-                String::new().into()
-            },
-        ]
-    }
-
-    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
-        vec![
-            "expiration".into(),
-            "document".into(),
-            "file_version".into(),
-        ]
-    }
-}
-
-#[derive(
-    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
-)]
-#[allow(non_snake_case)]
 pub struct PatchedStoragePathRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
