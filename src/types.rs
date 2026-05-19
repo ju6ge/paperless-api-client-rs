@@ -2030,7 +2030,7 @@ impl tabled::Tabled for CorrespondentRequest {
 pub struct CustomField {
     pub id: i64,
     pub name: String,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     pub data_type: DataTypeEnum,
     #[doc = "Extra data for the custom field, such as select options"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2192,7 +2192,7 @@ impl tabled::Tabled for CustomFieldInstanceRequest {
 #[allow(non_snake_case)]
 pub struct CustomFieldRequest {
     pub name: String,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     pub data_type: DataTypeEnum,
     #[doc = "Extra data for the custom field, such as select options"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2229,7 +2229,7 @@ impl tabled::Tabled for CustomFieldRequest {
     }
 }
 
-#[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+#[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
 #[derive(
     serde :: Serialize,
     serde :: Deserialize,
@@ -2271,6 +2271,9 @@ pub enum DataTypeEnum {
     #[serde(rename = "select")]
     #[display("select")]
     Select,
+    #[serde(rename = "longtext")]
+    #[display("longtext")]
+    Longtext,
 }
 
 #[derive(
@@ -2947,15 +2950,17 @@ impl tabled::Tabled for DocumentTypeRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct EmailRequestRequest {
+pub struct EmailDocumentRequestRequest {
+    #[doc = "Comma-separated email addresses"]
     pub addresses: String,
     pub subject: String,
     pub message: String,
+    #[doc = "Use archive version of documents if available"]
     #[serde(default)]
     pub use_archive_version: bool,
 }
 
-impl std::fmt::Display for EmailRequestRequest {
+impl std::fmt::Display for EmailDocumentRequestRequest {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(
             f,
@@ -2966,7 +2971,7 @@ impl std::fmt::Display for EmailRequestRequest {
 }
 
 #[cfg(feature = "tabled")]
-impl tabled::Tabled for EmailRequestRequest {
+impl tabled::Tabled for EmailDocumentRequestRequest {
     const LENGTH: usize = 4;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
@@ -2991,11 +2996,11 @@ impl tabled::Tabled for EmailRequestRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct EmailResponse {
+pub struct EmailDocumentResponse {
     pub message: String,
 }
 
-impl std::fmt::Display for EmailResponse {
+impl std::fmt::Display for EmailDocumentResponse {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(
             f,
@@ -3006,7 +3011,7 @@ impl std::fmt::Display for EmailResponse {
 }
 
 #[cfg(feature = "tabled")]
-impl tabled::Tabled for EmailResponse {
+impl tabled::Tabled for EmailDocumentResponse {
     const LENGTH: usize = 1;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![self.message.clone().into()]
@@ -3014,6 +3019,85 @@ impl tabled::Tabled for EmailResponse {
 
     fn headers() -> Vec<std::borrow::Cow<'static, str>> {
         vec!["message".into()]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct EmailDocumentsResponse {
+    pub message: String,
+}
+
+impl std::fmt::Display for EmailDocumentsResponse {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for EmailDocumentsResponse {
+    const LENGTH: usize = 1;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![self.message.clone().into()]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["message".into()]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct EmailRequest {
+    pub documents: Vec<i64>,
+    #[doc = "Comma-separated email addresses"]
+    pub addresses: String,
+    pub subject: String,
+    pub message: String,
+    #[doc = "Use archive version of documents if available"]
+    #[serde(default)]
+    pub use_archive_version: bool,
+}
+
+impl std::fmt::Display for EmailRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for EmailRequest {
+    const LENGTH: usize = 5;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.documents).into(),
+            self.addresses.clone().into(),
+            self.subject.clone().into(),
+            self.message.clone().into(),
+            format!("{:?}", self.use_archive_version).into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "documents".into(),
+            "addresses".into(),
+            "subject".into(),
+            "message".into(),
+            "use_archive_version".into(),
+        ]
     }
 }
 
@@ -5103,18 +5187,18 @@ impl tabled::Tabled for PaginatedMailRuleList {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct PaginatedNotesList {
+pub struct PaginatedProcessedMailList {
     pub count: i64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub next: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub previous: Option<String>,
-    pub results: Vec<Notes>,
+    pub results: Vec<ProcessedMail>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub all: Option<Vec<i64>>,
 }
 
-impl std::fmt::Display for PaginatedNotesList {
+impl std::fmt::Display for PaginatedProcessedMailList {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(
             f,
@@ -5125,8 +5209,8 @@ impl std::fmt::Display for PaginatedNotesList {
 }
 
 #[cfg(feature = "requests")]
-impl crate::types::paginate::Pagination for PaginatedNotesList {
-    type Item = Notes;
+impl crate::types::paginate::Pagination for PaginatedProcessedMailList {
+    type Item = ProcessedMail;
     fn has_more_pages(&self) -> bool {
         self.next.is_some()
     }
@@ -5159,7 +5243,7 @@ impl crate::types::paginate::Pagination for PaginatedNotesList {
 }
 
 #[cfg(feature = "tabled")]
-impl tabled::Tabled for PaginatedNotesList {
+impl tabled::Tabled for PaginatedProcessedMailList {
     const LENGTH: usize = 5;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
@@ -6350,7 +6434,7 @@ impl tabled::Tabled for PatchedCorrespondentRequest {
 pub struct PatchedCustomFieldRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub data_type: Option<DataTypeEnum>,
     #[doc = "Extra data for the custom field, such as select options"]
@@ -7242,62 +7326,6 @@ impl tabled::Tabled for PatchedSavedViewRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct PatchedShareLinkRequest {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub expiration: Option<chrono::DateTime<chrono::Utc>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub document: Option<i64>,
-    #[doc = "* `archive` - Archive\n* `original` - Original"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub file_version: Option<FileVersionEnum>,
-}
-
-impl std::fmt::Display for PatchedShareLinkRequest {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        write!(
-            f,
-            "{}",
-            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
-        )
-    }
-}
-
-#[cfg(feature = "tabled")]
-impl tabled::Tabled for PatchedShareLinkRequest {
-    const LENGTH: usize = 3;
-    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
-        vec![
-            if let Some(expiration) = &self.expiration {
-                format!("{expiration:?}").into()
-            } else {
-                String::new().into()
-            },
-            if let Some(document) = &self.document {
-                format!("{document:?}").into()
-            } else {
-                String::new().into()
-            },
-            if let Some(file_version) = &self.file_version {
-                format!("{file_version:?}").into()
-            } else {
-                String::new().into()
-            },
-        ]
-    }
-
-    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
-        vec![
-            "expiration".into(),
-            "document".into(),
-            "file_version".into(),
-        ]
-    }
-}
-
-#[derive(
-    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
-)]
-#[allow(non_snake_case)]
 pub struct PatchedStoragePathRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -7403,6 +7431,8 @@ pub struct PatchedTagRequest {
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
 }
 
 impl std::fmt::Display for PatchedTagRequest {
@@ -7417,7 +7447,7 @@ impl std::fmt::Display for PatchedTagRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for PatchedTagRequest {
-    const LENGTH: usize = 8;
+    const LENGTH: usize = 9;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(name) = &self.name {
@@ -7460,6 +7490,11 @@ impl tabled::Tabled for PatchedTagRequest {
             } else {
                 String::new().into()
             },
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
+            } else {
+                String::new().into()
+            },
         ]
     }
 
@@ -7473,6 +7508,7 @@ impl tabled::Tabled for PatchedTagRequest {
             "is_inbox_tag".into(),
             "owner".into(),
             "set_permissions".into(),
+            "parent".into(),
         ]
     }
 }
@@ -7610,7 +7646,7 @@ pub struct PatchedWorkflowActionRequest {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7997,9 +8033,24 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -8028,7 +8079,7 @@ impl std::fmt::Display for PatchedWorkflowTriggerRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for PatchedWorkflowTriggerRequest {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -8077,6 +8128,36 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -8084,6 +8165,11 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -8127,8 +8213,15 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),
@@ -8159,7 +8252,7 @@ pub struct PostDocumentRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archive_serial_number: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub custom_fields: Option<Vec<i64>>,
+    pub custom_fields: Option<serde_json::Value>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub from_webui: Option<bool>,
 }
@@ -8241,6 +8334,108 @@ impl tabled::Tabled for PostDocumentRequest {
             "custom_fields".into(),
             "from_webui".into(),
         ]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct ProcessedMail {
+    pub id: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<i64>,
+    pub rule: i64,
+    pub folder: String,
+    pub uid: String,
+    pub subject: String,
+    pub received: chrono::DateTime<chrono::Utc>,
+    pub processed: chrono::DateTime<chrono::Utc>,
+    pub status: String,
+    #[serde(default)]
+    pub error: Option<String>,
+}
+
+impl std::fmt::Display for ProcessedMail {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for ProcessedMail {
+    const LENGTH: usize = 10;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.id).into(),
+            if let Some(owner) = &self.owner {
+                format!("{owner:?}").into()
+            } else {
+                String::new().into()
+            },
+            format!("{:?}", self.rule).into(),
+            self.folder.clone().into(),
+            self.uid.clone().into(),
+            self.subject.clone().into(),
+            format!("{:?}", self.received).into(),
+            format!("{:?}", self.processed).into(),
+            self.status.clone().into(),
+            format!("{:?}", self.error).into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "id".into(),
+            "owner".into(),
+            "rule".into(),
+            "folder".into(),
+            "uid".into(),
+            "subject".into(),
+            "received".into(),
+            "processed".into(),
+            "status".into(),
+            "error".into(),
+        ]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct ProcessedMailRequest {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<i64>,
+}
+
+impl std::fmt::Display for ProcessedMailRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for ProcessedMailRequest {
+    const LENGTH: usize = 1;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![if let Some(owner) = &self.owner {
+            format!("{owner:?}").into()
+        } else {
+            String::new().into()
+        }]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["owner".into()]
     }
 }
 
@@ -9375,6 +9570,9 @@ pub struct Tag {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     pub user_can_change: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
+    pub children: Vec<i64>,
 }
 
 impl std::fmt::Display for Tag {
@@ -9389,7 +9587,7 @@ impl std::fmt::Display for Tag {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for Tag {
-    const LENGTH: usize = 12;
+    const LENGTH: usize = 14;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             format!("{:?}", self.id).into(),
@@ -9428,6 +9626,12 @@ impl tabled::Tabled for Tag {
                 String::new().into()
             },
             format!("{:?}", self.user_can_change).into(),
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
+            } else {
+                String::new().into()
+            },
+            format!("{:?}", self.children).into(),
         ]
     }
 
@@ -9445,6 +9649,8 @@ impl tabled::Tabled for Tag {
             "document_count".into(),
             "owner".into(),
             "user_can_change".into(),
+            "parent".into(),
+            "children".into(),
         ]
     }
 }
@@ -9504,6 +9710,8 @@ pub struct TagRequest {
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<i64>,
 }
 
 impl std::fmt::Display for TagRequest {
@@ -9518,7 +9726,7 @@ impl std::fmt::Display for TagRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for TagRequest {
-    const LENGTH: usize = 8;
+    const LENGTH: usize = 9;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             self.name.clone().into(),
@@ -9557,6 +9765,11 @@ impl tabled::Tabled for TagRequest {
             } else {
                 String::new().into()
             },
+            if let Some(parent) = &self.parent {
+                format!("{parent:?}").into()
+            } else {
+                String::new().into()
+            },
         ]
     }
 
@@ -9570,6 +9783,7 @@ impl tabled::Tabled for TagRequest {
             "is_inbox_tag".into(),
             "owner".into(),
             "set_permissions".into(),
+            "parent".into(),
         ]
     }
 }
@@ -10418,7 +10632,7 @@ pub struct WorkflowAction {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -10833,7 +11047,7 @@ pub struct WorkflowActionRequest {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -11393,9 +11607,24 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -11424,7 +11653,7 @@ impl std::fmt::Display for WorkflowTrigger {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for WorkflowTrigger {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -11469,6 +11698,36 @@ impl tabled::Tabled for WorkflowTrigger {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -11476,6 +11735,11 @@ impl tabled::Tabled for WorkflowTrigger {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -11519,8 +11783,15 @@ impl tabled::Tabled for WorkflowTrigger {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),
@@ -11558,9 +11829,24 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -11589,7 +11875,7 @@ impl std::fmt::Display for WorkflowTriggerRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for WorkflowTriggerRequest {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -11634,6 +11920,36 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -11641,6 +11957,11 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -11684,8 +12005,15 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),

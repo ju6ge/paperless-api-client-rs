@@ -1076,14 +1076,14 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/email/`.\n\nEmail the document to one or more recipients as an attachment.\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n\n```rust,no_run\nasync fn example_documents_email_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailResponse = client\n        .documents()\n        .email_create(\n            4 as i64,\n            &paperless_api_client::types::EmailRequestRequest {\n                addresses: \"some-string\".to_string(),\n                subject: \"some-string\".to_string(),\n                message: \"some-string\".to_string(),\n                use_archive_version: true,\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/email/`.\n\nEmail the document to one or more recipients as an attachment.\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n\n**NOTE:** This operation is marked as deprecated.\n\n```rust,no_run\nasync fn example_documents_email_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailDocumentResponse = client\n        .documents()\n        .email_create(\n            4 as i64,\n            &paperless_api_client::types::EmailDocumentRequestRequest {\n                addresses: \"some-string\".to_string(),\n                subject: \"some-string\".to_string(),\n                message: \"some-string\".to_string(),\n                use_archive_version: true,\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn email_create<'a>(
         &'a self,
         doc_id: i64,
-        body: &crate::types::EmailRequestRequest,
-    ) -> Result<crate::types::EmailResponse, crate::types::error::Error> {
+        body: &crate::types::EmailDocumentRequestRequest,
+    ) -> Result<crate::types::EmailDocumentResponse, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::POST,
             format!(
@@ -1274,16 +1274,14 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_documents_notes_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut documents = client.documents();\n    let mut stream = documents.notes_list_stream(4 as i64, Some(4 as i64), Some(4 as i64));\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n\n```rust,no_run\nasync fn example_documents_notes_list() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: Vec<paperless_api_client::types::Notes> = client\n        .documents()\n        .notes_list(4 as i64, Some(4 as i64))\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn notes_list<'a>(
         &'a self,
         doc_id: i64,
         id: Option<i64>,
-        page: Option<i64>,
-        page_size: Option<i64>,
-    ) -> Result<crate::types::PaginatedNotesList, crate::types::error::Error> {
+    ) -> Result<Vec<crate::types::Notes>, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::GET,
             format!(
@@ -1296,14 +1294,6 @@ impl Documents {
         let mut query_params = vec![];
         if let Some(p) = id {
             query_params.push(("id", format!("{p}")));
-        }
-
-        if let Some(p) = page {
-            query_params.push(("page", format!("{p}")));
-        }
-
-        if let Some(p) = page_size {
-            query_params.push(("page_size", format!("{p}")));
         }
 
         req = req.query(&query_params);
@@ -1326,96 +1316,15 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_documents_notes_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut documents = client.documents();\n    let mut stream = documents.notes_list_stream(4 as i64, Some(4 as i64), Some(4 as i64));\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
-    #[tracing::instrument]
-    #[cfg(not(feature = "js"))]
-    #[allow(non_snake_case)]
-    pub fn notes_list_stream<'a>(
-        &'a self,
-        doc_id: i64,
-        id: Option<i64>,
-        page_size: Option<i64>,
-    ) -> impl futures::Stream<Item = Result<crate::types::Notes, crate::types::error::Error>> + Unpin + '_
-    {
-        use crate::types::paginate::Pagination;
-        use futures::{StreamExt, TryFutureExt, TryStreamExt};
-        self.notes_list(doc_id, id, None, page_size)
-            .map_ok(move |result| {
-                let items = futures::stream::iter(result.items().into_iter().map(Ok));
-                let next_pages = futures::stream::try_unfold(
-                    (None, result),
-                    move |(prev_page_token, new_result)| async move {
-                        if new_result.has_more_pages()
-                            && !new_result.items().is_empty()
-                            && prev_page_token != new_result.next_page_token()
-                        {
-                            async {
-                                let mut req = self.client.client.request(
-                                    http::Method::GET,
-                                    format!(
-                                        "{}/{}",
-                                        self.client.base_url,
-                                        "api/documents/{doc_id}/notes/"
-                                            .replace("{doc_id}", &format!("{}", doc_id))
-                                    ),
-                                );
-                                req = req.header(
-                                    "Authorization",
-                                    format!("Token {}", &self.client.token),
-                                );
-                                let mut request = req.build()?;
-                                request = new_result.next_page(request)?;
-                                let resp = self.client.client.execute(request).await?;
-                                let status = resp.status();
-                                if status.is_success() {
-                                    let text = resp.text().await.unwrap_or_default();
-                                    serde_json::from_str(&text).map_err(|err| {
-                                        crate::types::error::Error::from_serde_error(
-                                            format_serde_error::SerdeError::new(
-                                                text.to_string(),
-                                                err,
-                                            ),
-                                            status,
-                                        )
-                                    })
-                                } else {
-                                    let text = resp.text().await.unwrap_or_default();
-                                    Err(crate::types::error::Error::Server {
-                                        body: text.to_string(),
-                                        status,
-                                    })
-                                }
-                            }
-                            .map_ok(|result: crate::types::PaginatedNotesList| {
-                                Some((
-                                    futures::stream::iter(result.items().into_iter().map(Ok)),
-                                    (new_result.next_page_token(), result),
-                                ))
-                            })
-                            .await
-                        } else {
-                            Ok(None)
-                        }
-                    },
-                )
-                .try_flatten();
-                items.chain(next_pages)
-            })
-            .try_flatten_stream()
-            .boxed()
-    }
-
-    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nasync fn example_documents_notes_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::PaginatedNotesList = client\n        .documents()\n        .notes_create(\n            4 as i64,\n            Some(4 as i64),\n            Some(4 as i64),\n            Some(4 as i64),\n            &paperless_api_client::types::NoteCreateRequestRequest {\n                note: \"some-string\".to_string(),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n\n```rust,no_run\nasync fn example_documents_notes_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: Vec<paperless_api_client::types::Notes> = client\n        .documents()\n        .notes_create(\n            4 as i64,\n            Some(4 as i64),\n            &paperless_api_client::types::NoteCreateRequestRequest {\n                note: \"some-string\".to_string(),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn notes_create<'a>(
         &'a self,
         doc_id: i64,
         id: Option<i64>,
-        page: Option<i64>,
-        page_size: Option<i64>,
         body: &crate::types::NoteCreateRequestRequest,
-    ) -> Result<crate::types::PaginatedNotesList, crate::types::error::Error> {
+    ) -> Result<Vec<crate::types::Notes>, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::POST,
             format!(
@@ -1428,14 +1337,6 @@ impl Documents {
         let mut query_params = vec![];
         if let Some(p) = id {
             query_params.push(("id", format!("{p}")));
-        }
-
-        if let Some(p) = page {
-            query_params.push(("page", format!("{p}")));
-        }
-
-        if let Some(p) = page_size {
-            query_params.push(("page_size", format!("{p}")));
         }
 
         req = req.query(&query_params);
@@ -1459,16 +1360,14 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `DELETE` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nasync fn example_documents_notes_destroy() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::PaginatedNotesList = client\n        .documents()\n        .notes_destroy(4 as i64, Some(4 as i64), Some(4 as i64), Some(4 as i64))\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `DELETE` request to `/api/documents/{doc_id}/notes/`.\n\nView, add, or delete notes for the document\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n- `id: Option<i64>`: Note ID to delete (used only for DELETE requests)\n\n```rust,no_run\nasync fn example_documents_notes_destroy() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: Vec<paperless_api_client::types::Notes> = client\n        .documents()\n        .notes_destroy(4 as i64, Some(4 as i64))\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn notes_destroy<'a>(
         &'a self,
         doc_id: i64,
         id: Option<i64>,
-        page: Option<i64>,
-        page_size: Option<i64>,
-    ) -> Result<crate::types::PaginatedNotesList, crate::types::error::Error> {
+    ) -> Result<Vec<crate::types::Notes>, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::DELETE,
             format!(
@@ -1481,14 +1380,6 @@ impl Documents {
         let mut query_params = vec![];
         if let Some(p) = id {
             query_params.push(("id", format!("{p}")));
-        }
-
-        if let Some(p) = page {
-            query_params.push(("page", format!("{p}")));
-        }
-
-        if let Some(p) = page_size {
-            query_params.push(("page_size", format!("{p}")));
         }
 
         req = req.query(&query_params);
@@ -1718,6 +1609,38 @@ impl Documents {
         }
     }
 
+    #[doc = "Perform a `POST` request to `/api/documents/email/`.\n\nEmail one or more documents as attachments to one or more recipients.\n\n```rust,no_run\nasync fn example_documents_email() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailDocumentsResponse = client\n        .documents()\n        .email(&paperless_api_client::types::EmailRequest {\n            documents: vec![4 as i64],\n            addresses: \"some-string\".to_string(),\n            subject: \"some-string\".to_string(),\n            message: \"some-string\".to_string(),\n            use_archive_version: true,\n        })\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[tracing::instrument]
+    #[allow(non_snake_case)]
+    pub async fn email<'a>(
+        &'a self,
+        body: &crate::types::EmailRequest,
+    ) -> Result<crate::types::EmailDocumentsResponse, crate::types::error::Error> {
+        let mut req = self.client.client.request(
+            http::Method::POST,
+            format!("{}/{}", self.client.base_url, "api/documents/email/"),
+        );
+        req = req.header("Authorization", format!("Token {}", &self.client.token));
+        req = req.json(body);
+        let resp = req.send().await?;
+        let status = resp.status();
+        if status.is_success() {
+            let text = resp.text().await.unwrap_or_default();
+            serde_json::from_str(&text).map_err(|err| {
+                crate::types::error::Error::from_serde_error(
+                    format_serde_error::SerdeError::new(text.to_string(), err),
+                    status,
+                )
+            })
+        } else {
+            let text = resp.text().await.unwrap_or_default();
+            Err(crate::types::error::Error::Server {
+                body: text.to_string(),
+                status,
+            })
+        }
+    }
+
     #[doc = "Perform a `GET` request to `/api/documents/next_asn/`.\n\nGet the next available Archive Serial Number (ASN) for a new document\n\n```rust,no_run\nasync fn example_documents_next_asn_retrieve() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: i64 = client.documents().next_asn_retrieve().await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
@@ -1746,7 +1669,7 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `POST` request to `/api/documents/post_document/`.\n\nUpload a document via the API\n\nSee <https://docs.paperless-ngx.com/api/#file-uploads|Further documentation> for more information.\n\n```rust,no_run\nasync fn example_documents_post_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: String = client\n        .documents()\n        .post_create(\n            vec![paperless_api_client::types::multipart::Attachment {\n                name: \"thing\".to_string(),\n                filepath: Some(\"myfile.json\".into()),\n                content_type: Some(\"application/json\".to_string()),\n                data: std::fs::read(\"myfile.json\").unwrap(),\n            }],\n            &paperless_api_client::types::PostDocumentRequest {\n                created: Some(chrono::Utc::now()),\n                document: bytes::Bytes::from(\"some-string\"),\n                title: Some(\"some-string\".to_string()),\n                correspondent: Some(4 as i64),\n                document_type: Some(4 as i64),\n                storage_path: Some(4 as i64),\n                tags: Some(vec![4 as i64]),\n                archive_serial_number: Some(4 as i64),\n                custom_fields: Some(vec![4 as i64]),\n                from_webui: Some(true),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `POST` request to `/api/documents/post_document/`.\n\nUpload a document via the API\n\nSee <https://docs.paperless-ngx.com/api/#file-uploads|Further documentation> for more information.\n\n```rust,no_run\nasync fn example_documents_post_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: String = client\n        .documents()\n        .post_create(\n            vec![paperless_api_client::types::multipart::Attachment {\n                name: \"thing\".to_string(),\n                filepath: Some(\"myfile.json\".into()),\n                content_type: Some(\"application/json\".to_string()),\n                data: std::fs::read(\"myfile.json\").unwrap(),\n            }],\n            &paperless_api_client::types::PostDocumentRequest {\n                created: Some(chrono::Utc::now()),\n                document: bytes::Bytes::from(\"some-string\"),\n                title: Some(\"some-string\".to_string()),\n                correspondent: Some(4 as i64),\n                document_type: Some(4 as i64),\n                storage_path: Some(4 as i64),\n                tags: Some(vec![4 as i64]),\n                archive_serial_number: Some(4 as i64),\n                custom_fields: Some(serde_json::Value::String(\"some-string\".to_string())),\n                from_webui: Some(true),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn post_create<'a>(

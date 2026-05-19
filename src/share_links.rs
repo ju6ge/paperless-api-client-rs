@@ -11,7 +11,7 @@ impl ShareLinks {
         Self { client }
     }
 
-    #[doc = "Perform a `GET` request to `/api/share_links/`.\n\n**Parameters:**\n\n- `created_date_gt: Option<chrono::NaiveDate>`\n- `created_date_gte: Option<chrono::NaiveDate>`\n- `created_date_lt: Option<chrono::NaiveDate>`\n- `created_date_lte: Option<chrono::NaiveDate>`\n- `created_day: Option<f64>`\n- `created_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_month: Option<f64>`\n- `created_year: Option<f64>`\n- `expiration_date_gt: Option<chrono::NaiveDate>`\n- `expiration_date_gte: Option<chrono::NaiveDate>`\n- `expiration_date_lt: Option<chrono::NaiveDate>`\n- `expiration_date_lte: Option<chrono::NaiveDate>`\n- `expiration_day: Option<f64>`\n- `expiration_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_month: Option<f64>`\n- `expiration_year: Option<f64>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_share_links_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut share_links = client.share_links();\n    let mut stream = share_links.list_stream(\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/share_links/`.\n\nPass a user object to serializer\n\n**Parameters:**\n\n- `created_date_gt: Option<chrono::NaiveDate>`\n- `created_date_gte: Option<chrono::NaiveDate>`\n- `created_date_lt: Option<chrono::NaiveDate>`\n- `created_date_lte: Option<chrono::NaiveDate>`\n- `created_day: Option<f64>`\n- `created_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_month: Option<f64>`\n- `created_year: Option<f64>`\n- `expiration_date_gt: Option<chrono::NaiveDate>`\n- `expiration_date_gte: Option<chrono::NaiveDate>`\n- `expiration_date_lt: Option<chrono::NaiveDate>`\n- `expiration_date_lte: Option<chrono::NaiveDate>`\n- `expiration_day: Option<f64>`\n- `expiration_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_month: Option<f64>`\n- `expiration_year: Option<f64>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_share_links_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut share_links = client.share_links();\n    let mut stream = share_links.list_stream(\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn list<'a>(
@@ -168,7 +168,7 @@ impl ShareLinks {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/share_links/`.\n\n**Parameters:**\n\n- `created_date_gt: Option<chrono::NaiveDate>`\n- `created_date_gte: Option<chrono::NaiveDate>`\n- `created_date_lt: Option<chrono::NaiveDate>`\n- `created_date_lte: Option<chrono::NaiveDate>`\n- `created_day: Option<f64>`\n- `created_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_month: Option<f64>`\n- `created_year: Option<f64>`\n- `expiration_date_gt: Option<chrono::NaiveDate>`\n- `expiration_date_gte: Option<chrono::NaiveDate>`\n- `expiration_date_lt: Option<chrono::NaiveDate>`\n- `expiration_date_lte: Option<chrono::NaiveDate>`\n- `expiration_day: Option<f64>`\n- `expiration_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_month: Option<f64>`\n- `expiration_year: Option<f64>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_share_links_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut share_links = client.share_links();\n    let mut stream = share_links.list_stream(\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/share_links/`.\n\nPass a user object to serializer\n\n**Parameters:**\n\n- `created_date_gt: Option<chrono::NaiveDate>`\n- `created_date_gte: Option<chrono::NaiveDate>`\n- `created_date_lt: Option<chrono::NaiveDate>`\n- `created_date_lte: Option<chrono::NaiveDate>`\n- `created_day: Option<f64>`\n- `created_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `created_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `created_month: Option<f64>`\n- `created_year: Option<f64>`\n- `expiration_date_gt: Option<chrono::NaiveDate>`\n- `expiration_date_gte: Option<chrono::NaiveDate>`\n- `expiration_date_lt: Option<chrono::NaiveDate>`\n- `expiration_date_lte: Option<chrono::NaiveDate>`\n- `expiration_day: Option<f64>`\n- `expiration_gt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_gte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lt: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_lte: Option<chrono::DateTime<chrono::Utc>>`\n- `expiration_month: Option<f64>`\n- `expiration_year: Option<f64>`\n- `ordering: Option<String>`: Which field to use when ordering the results.\n- `page: Option<i64>`: A page number within the paginated result set.\n- `page_size: Option<i64>`: Number of results to return per page.\n\n```rust,no_run\nuse futures_util::TryStreamExt;\nasync fn example_share_links_list_stream() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let mut share_links = client.share_links();\n    let mut stream = share_links.list_stream(\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(chrono::Utc::now().date_naive()),\n        Some(3.14 as f64),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(chrono::Utc::now()),\n        Some(3.14 as f64),\n        Some(3.14 as f64),\n        Some(\"some-string\".to_string()),\n        Some(4 as i64),\n    );\n    loop {\n        match stream.try_next().await {\n            Ok(Some(item)) => {\n                println!(\"{:?}\", item);\n            }\n            Ok(None) => {\n                break;\n            }\n            Err(err) => {\n                return Err(err.into());\n            }\n        }\n    }\n\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[cfg(not(feature = "js"))]
     #[allow(non_snake_case)]
@@ -285,7 +285,7 @@ impl ShareLinks {
         .boxed()
     }
 
-    #[doc = "Perform a `POST` request to `/api/share_links/`.\n\n```rust,no_run\nasync fn example_share_links_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .create(&paperless_api_client::types::ShareLinkRequest {\n            expiration: Some(chrono::Utc::now()),\n            document: Some(4 as i64),\n            file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n        })\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `POST` request to `/api/share_links/`.\n\nPass a user object to serializer\n\n```rust,no_run\nasync fn example_share_links_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .create(&paperless_api_client::types::ShareLinkRequest {\n            expiration: Some(chrono::Utc::now()),\n            document: Some(4 as i64),\n            file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n        })\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn create<'a>(
@@ -317,7 +317,7 @@ impl ShareLinks {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_retrieve() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client.share_links().retrieve(4 as i64).await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/share_links/{id}/`.\n\nPass a user object to serializer\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_retrieve() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client.share_links().retrieve(4 as i64).await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn retrieve<'a>(
@@ -333,43 +333,6 @@ impl ShareLinks {
             ),
         );
         req = req.header("Authorization", format!("Token {}", &self.client.token));
-        let resp = req.send().await?;
-        let status = resp.status();
-        if status.is_success() {
-            let text = resp.text().await.unwrap_or_default();
-            serde_json::from_str(&text).map_err(|err| {
-                crate::types::error::Error::from_serde_error(
-                    format_serde_error::SerdeError::new(text.to_string(), err),
-                    status,
-                )
-            })
-        } else {
-            let text = resp.text().await.unwrap_or_default();
-            Err(crate::types::error::Error::Server {
-                body: text.to_string(),
-                status,
-            })
-        }
-    }
-
-    #[doc = "Perform a `PUT` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_update() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .update(\n            4 as i64,\n            &paperless_api_client::types::ShareLinkRequest {\n                expiration: Some(chrono::Utc::now()),\n                document: Some(4 as i64),\n                file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
-    #[tracing::instrument]
-    #[allow(non_snake_case)]
-    pub async fn update<'a>(
-        &'a self,
-        id: i64,
-        body: &crate::types::ShareLinkRequest,
-    ) -> Result<crate::types::ShareLink, crate::types::error::Error> {
-        let mut req = self.client.client.request(
-            http::Method::PUT,
-            format!(
-                "{}/{}",
-                self.client.base_url,
-                "api/share_links/{id}/".replace("{id}", &format!("{id}"))
-            ),
-        );
-        req = req.header("Authorization", format!("Token {}", &self.client.token));
-        req = req.json(body);
         let resp = req.send().await?;
         let status = resp.status();
         if status.is_success() {
@@ -406,43 +369,6 @@ impl ShareLinks {
         let status = resp.status();
         if status.is_success() {
             Ok(())
-        } else {
-            let text = resp.text().await.unwrap_or_default();
-            Err(crate::types::error::Error::Server {
-                body: text.to_string(),
-                status,
-            })
-        }
-    }
-
-    #[doc = "Perform a `PATCH` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_partial_update() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::ShareLink = client\n        .share_links()\n        .partial_update(\n            4 as i64,\n            &paperless_api_client::types::PatchedShareLinkRequest {\n                expiration: Some(chrono::Utc::now()),\n                document: Some(4 as i64),\n                file_version: Some(paperless_api_client::types::FileVersionEnum::Original),\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
-    #[tracing::instrument]
-    #[allow(non_snake_case)]
-    pub async fn partial_update<'a>(
-        &'a self,
-        id: i64,
-        body: &crate::types::PatchedShareLinkRequest,
-    ) -> Result<crate::types::ShareLink, crate::types::error::Error> {
-        let mut req = self.client.client.request(
-            http::Method::PATCH,
-            format!(
-                "{}/{}",
-                self.client.base_url,
-                "api/share_links/{id}/".replace("{id}", &format!("{id}"))
-            ),
-        );
-        req = req.header("Authorization", format!("Token {}", &self.client.token));
-        req = req.json(body);
-        let resp = req.send().await?;
-        let status = resp.status();
-        if status.is_success() {
-            let text = resp.text().await.unwrap_or_default();
-            serde_json::from_str(&text).map_err(|err| {
-                crate::types::error::Error::from_serde_error(
-                    format_serde_error::SerdeError::new(text.to_string(), err),
-                    status,
-                )
-            })
         } else {
             let text = resp.text().await.unwrap_or_default();
             Err(crate::types::error::Error::Server {

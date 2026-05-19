@@ -84,6 +84,8 @@ mod methods;
 #[cfg(feature = "requests")]
 pub mod oauth;
 #[cfg(feature = "requests")]
+pub mod processed_mail;
+#[cfg(feature = "requests")]
 pub mod profile;
 #[cfg(feature = "requests")]
 pub mod remote_version;
@@ -413,6 +415,11 @@ impl Client {
     /// Return a reference to an interface that provides access to oauth operations.
     pub fn oauth(&self) -> oauth::Oauth {
         oauth::Oauth::new(self.clone())
+    }
+
+    /// Return a reference to an interface that provides access to processed_mail operations.
+    pub fn processed_mail(&self) -> processed_mail::ProcessedMail {
+        processed_mail::ProcessedMail::new(self.clone())
     }
 
     /// Return a reference to an interface that provides access to profile operations.
