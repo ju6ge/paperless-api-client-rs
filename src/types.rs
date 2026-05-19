@@ -8252,7 +8252,7 @@ pub struct PostDocumentRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archive_serial_number: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub custom_fields: Option<Vec<i64>>,
+    pub custom_fields: Option<serde_json::Value>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub from_webui: Option<bool>,
 }
