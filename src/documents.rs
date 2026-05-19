@@ -1076,14 +1076,14 @@ impl Documents {
         }
     }
 
-    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/email/`.\n\nEmail the document to one or more recipients as an attachment.\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n\n```rust,no_run\nasync fn example_documents_email_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailResponse = client\n        .documents()\n        .email_create(\n            4 as i64,\n            &paperless_api_client::types::EmailRequestRequest {\n                addresses: \"some-string\".to_string(),\n                subject: \"some-string\".to_string(),\n                message: \"some-string\".to_string(),\n                use_archive_version: true,\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `POST` request to `/api/documents/{doc_id}/email/`.\n\nEmail the document to one or more recipients as an attachment.\n\n**Parameters:**\n\n- `doc_id: i64`: A unique integer value identifying this document. (required)\n\n**NOTE:** This operation is marked as deprecated.\n\n```rust,no_run\nasync fn example_documents_email_create() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailDocumentResponse = client\n        .documents()\n        .email_create(\n            4 as i64,\n            &paperless_api_client::types::EmailDocumentRequestRequest {\n                addresses: \"some-string\".to_string(),\n                subject: \"some-string\".to_string(),\n                message: \"some-string\".to_string(),\n                use_archive_version: true,\n            },\n        )\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn email_create<'a>(
         &'a self,
         doc_id: i64,
-        body: &crate::types::EmailRequestRequest,
-    ) -> Result<crate::types::EmailResponse, crate::types::error::Error> {
+        body: &crate::types::EmailDocumentRequestRequest,
+    ) -> Result<crate::types::EmailDocumentResponse, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::POST,
             format!(
@@ -1587,6 +1587,38 @@ impl Documents {
         let mut req = self.client.client.request(
             http::Method::POST,
             format!("{}/{}", self.client.base_url, "api/documents/bulk_edit/"),
+        );
+        req = req.header("Authorization", format!("Token {}", &self.client.token));
+        req = req.json(body);
+        let resp = req.send().await?;
+        let status = resp.status();
+        if status.is_success() {
+            let text = resp.text().await.unwrap_or_default();
+            serde_json::from_str(&text).map_err(|err| {
+                crate::types::error::Error::from_serde_error(
+                    format_serde_error::SerdeError::new(text.to_string(), err),
+                    status,
+                )
+            })
+        } else {
+            let text = resp.text().await.unwrap_or_default();
+            Err(crate::types::error::Error::Server {
+                body: text.to_string(),
+                status,
+            })
+        }
+    }
+
+    #[doc = "Perform a `POST` request to `/api/documents/email/`.\n\nEmail one or more documents as attachments to one or more recipients.\n\n```rust,no_run\nasync fn example_documents_email() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: paperless_api_client::types::EmailDocumentsResponse = client\n        .documents()\n        .email(&paperless_api_client::types::EmailRequest {\n            documents: vec![4 as i64],\n            addresses: \"some-string\".to_string(),\n            subject: \"some-string\".to_string(),\n            message: \"some-string\".to_string(),\n            use_archive_version: true,\n        })\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[tracing::instrument]
+    #[allow(non_snake_case)]
+    pub async fn email<'a>(
+        &'a self,
+        body: &crate::types::EmailRequest,
+    ) -> Result<crate::types::EmailDocumentsResponse, crate::types::error::Error> {
+        let mut req = self.client.client.request(
+            http::Method::POST,
+            format!("{}/{}", self.client.base_url, "api/documents/email/"),
         );
         req = req.header("Authorization", format!("Token {}", &self.client.token));
         req = req.json(body);

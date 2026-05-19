@@ -2950,7 +2950,8 @@ impl tabled::Tabled for DocumentTypeRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct EmailRequestRequest {
+pub struct EmailDocumentRequestRequest {
+    #[doc = "Comma-separated email addresses"]
     pub addresses: String,
     pub subject: String,
     pub message: String,
@@ -2959,7 +2960,7 @@ pub struct EmailRequestRequest {
     pub use_archive_version: bool,
 }
 
-impl std::fmt::Display for EmailRequestRequest {
+impl std::fmt::Display for EmailDocumentRequestRequest {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(
             f,
@@ -2970,7 +2971,7 @@ impl std::fmt::Display for EmailRequestRequest {
 }
 
 #[cfg(feature = "tabled")]
-impl tabled::Tabled for EmailRequestRequest {
+impl tabled::Tabled for EmailDocumentRequestRequest {
     const LENGTH: usize = 4;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
@@ -2995,11 +2996,11 @@ impl tabled::Tabled for EmailRequestRequest {
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
 #[allow(non_snake_case)]
-pub struct EmailResponse {
+pub struct EmailDocumentResponse {
     pub message: String,
 }
 
-impl std::fmt::Display for EmailResponse {
+impl std::fmt::Display for EmailDocumentResponse {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(
             f,
@@ -3010,7 +3011,7 @@ impl std::fmt::Display for EmailResponse {
 }
 
 #[cfg(feature = "tabled")]
-impl tabled::Tabled for EmailResponse {
+impl tabled::Tabled for EmailDocumentResponse {
     const LENGTH: usize = 1;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![self.message.clone().into()]
@@ -3018,6 +3019,85 @@ impl tabled::Tabled for EmailResponse {
 
     fn headers() -> Vec<std::borrow::Cow<'static, str>> {
         vec!["message".into()]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct EmailDocumentsResponse {
+    pub message: String,
+}
+
+impl std::fmt::Display for EmailDocumentsResponse {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for EmailDocumentsResponse {
+    const LENGTH: usize = 1;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![self.message.clone().into()]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["message".into()]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct EmailRequest {
+    pub documents: Vec<i64>,
+    #[doc = "Comma-separated email addresses"]
+    pub addresses: String,
+    pub subject: String,
+    pub message: String,
+    #[doc = "Use archive version of documents if available"]
+    #[serde(default)]
+    pub use_archive_version: bool,
+}
+
+impl std::fmt::Display for EmailRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for EmailRequest {
+    const LENGTH: usize = 5;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.documents).into(),
+            self.addresses.clone().into(),
+            self.subject.clone().into(),
+            self.message.clone().into(),
+            format!("{:?}", self.use_archive_version).into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "documents".into(),
+            "addresses".into(),
+            "subject".into(),
+            "message".into(),
+            "use_archive_version".into(),
+        ]
     }
 }
 
@@ -5103,6 +5183,100 @@ impl tabled::Tabled for PaginatedMailRuleList {
     }
 }
 
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct PaginatedProcessedMailList {
+    pub count: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub next: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub previous: Option<String>,
+    pub results: Vec<ProcessedMail>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub all: Option<Vec<i64>>,
+}
+
+impl std::fmt::Display for PaginatedProcessedMailList {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "requests")]
+impl crate::types::paginate::Pagination for PaginatedProcessedMailList {
+    type Item = ProcessedMail;
+    fn has_more_pages(&self) -> bool {
+        self.next.is_some()
+    }
+
+    fn next_page_token(&self) -> Option<String> {
+        self.next.clone()
+    }
+
+    fn next_page(
+        &self,
+        req: reqwest::Request,
+    ) -> anyhow::Result<reqwest::Request, crate::types::error::Error> {
+        let mut req = req.try_clone().ok_or_else(|| {
+            crate::types::error::Error::InvalidRequest(format!(
+                "failed to clone request: {req:?}"
+            ))
+        })?;
+        *req.url_mut() = url::Url::parse(self.next.as_deref().unwrap_or("")).map_err(|_| {
+            crate::types::error::Error::InvalidRequest(format!(
+                "failed to parse url: {:?}",
+                self.next
+            ))
+        })?;
+        Ok(req)
+    }
+
+    fn items(&self) -> Vec<Self::Item> {
+        self.results.clone()
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for PaginatedProcessedMailList {
+    const LENGTH: usize = 5;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.count).into(),
+            if let Some(next) = &self.next {
+                format!("{next:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(previous) = &self.previous {
+                format!("{previous:?}").into()
+            } else {
+                String::new().into()
+            },
+            format!("{:?}", self.results).into(),
+            if let Some(all) = &self.all {
+                format!("{all:?}").into()
+            } else {
+                String::new().into()
+            },
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "count".into(),
+            "next".into(),
+            "previous".into(),
+            "results".into(),
+            "all".into(),
+        ]
+    }
+}
 
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
@@ -8152,6 +8326,108 @@ impl tabled::Tabled for PostDocumentRequest {
             "custom_fields".into(),
             "from_webui".into(),
         ]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct ProcessedMail {
+    pub id: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<i64>,
+    pub rule: i64,
+    pub folder: String,
+    pub uid: String,
+    pub subject: String,
+    pub received: chrono::DateTime<chrono::Utc>,
+    pub processed: chrono::DateTime<chrono::Utc>,
+    pub status: String,
+    #[serde(default)]
+    pub error: Option<String>,
+}
+
+impl std::fmt::Display for ProcessedMail {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for ProcessedMail {
+    const LENGTH: usize = 10;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            format!("{:?}", self.id).into(),
+            if let Some(owner) = &self.owner {
+                format!("{owner:?}").into()
+            } else {
+                String::new().into()
+            },
+            format!("{:?}", self.rule).into(),
+            self.folder.clone().into(),
+            self.uid.clone().into(),
+            self.subject.clone().into(),
+            format!("{:?}", self.received).into(),
+            format!("{:?}", self.processed).into(),
+            self.status.clone().into(),
+            format!("{:?}", self.error).into(),
+        ]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec![
+            "id".into(),
+            "owner".into(),
+            "rule".into(),
+            "folder".into(),
+            "uid".into(),
+            "subject".into(),
+            "received".into(),
+            "processed".into(),
+            "status".into(),
+            "error".into(),
+        ]
+    }
+}
+
+#[derive(
+    serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
+)]
+#[allow(non_snake_case)]
+pub struct ProcessedMailRequest {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<i64>,
+}
+
+impl std::fmt::Display for ProcessedMailRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(self).map_err(|_| std::fmt::Error)?
+        )
+    }
+}
+
+#[cfg(feature = "tabled")]
+impl tabled::Tabled for ProcessedMailRequest {
+    const LENGTH: usize = 1;
+    fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
+        vec![if let Some(owner) = &self.owner {
+            format!("{owner:?}").into()
+        } else {
+            String::new().into()
+        }]
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        vec!["owner".into()]
     }
 }
 
