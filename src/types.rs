@@ -2951,6 +2951,7 @@ pub struct EmailRequestRequest {
     pub addresses: String,
     pub subject: String,
     pub message: String,
+    #[doc = "Use archive version of documents if available"]
     #[serde(default)]
     pub use_archive_version: bool,
 }
@@ -7460,7 +7461,7 @@ pub struct PatchedWorkflowActionRequest {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -10268,7 +10269,7 @@ pub struct WorkflowAction {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -10683,7 +10684,7 @@ pub struct WorkflowActionRequest {
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
-    #[doc = "Assign a document title, can include some placeholders, see documentation."]
+    #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
