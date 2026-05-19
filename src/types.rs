@@ -7851,9 +7851,24 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -7882,7 +7897,7 @@ impl std::fmt::Display for PatchedWorkflowTriggerRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for PatchedWorkflowTriggerRequest {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -7931,6 +7946,36 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -7938,6 +7983,11 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -7981,8 +8031,15 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),
@@ -9424,6 +9481,7 @@ impl tabled::Tabled for TagRequest {
             "is_inbox_tag".into(),
             "owner".into(),
             "set_permissions".into(),
+            "parent".into(),
         ]
     }
 }
@@ -11247,9 +11305,24 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -11278,7 +11351,7 @@ impl std::fmt::Display for WorkflowTrigger {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for WorkflowTrigger {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -11323,6 +11396,36 @@ impl tabled::Tabled for WorkflowTrigger {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -11330,6 +11433,11 @@ impl tabled::Tabled for WorkflowTrigger {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -11373,8 +11481,15 @@ impl tabled::Tabled for WorkflowTrigger {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),
@@ -11412,9 +11527,24 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_tags: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_all_tags: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_tags: Option<Vec<i64>>,
+    #[doc = "JSON-encoded custom field query expression."]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_custom_field_query: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_correspondents: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_document_types: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_not_storage_paths: Option<Vec<i64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_has_document_type: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter_has_storage_path: Option<i64>,
     #[doc = "The number of days to offset the schedule trigger by."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub schedule_offset_days: Option<i64>,
@@ -11443,7 +11573,7 @@ impl std::fmt::Display for WorkflowTriggerRequest {
 
 #[cfg(feature = "tabled")]
 impl tabled::Tabled for WorkflowTriggerRequest {
-    const LENGTH: usize = 17;
+    const LENGTH: usize = 24;
     fn fields(&self) -> Vec<std::borrow::Cow<'static, str>> {
         vec![
             if let Some(id) = &self.id {
@@ -11488,6 +11618,36 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             } else {
                 String::new().into()
             },
+            if let Some(filter_has_all_tags) = &self.filter_has_all_tags {
+                format!("{filter_has_all_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_tags) = &self.filter_has_not_tags {
+                format!("{filter_has_not_tags:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_custom_field_query) = &self.filter_custom_field_query {
+                format!("{filter_custom_field_query:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_correspondents) = &self.filter_has_not_correspondents {
+                format!("{filter_has_not_correspondents:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_document_types) = &self.filter_has_not_document_types {
+                format!("{filter_has_not_document_types:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_not_storage_paths) = &self.filter_has_not_storage_paths {
+                format!("{filter_has_not_storage_paths:?}").into()
+            } else {
+                String::new().into()
+            },
             if let Some(filter_has_correspondent) = &self.filter_has_correspondent {
                 format!("{filter_has_correspondent:?}").into()
             } else {
@@ -11495,6 +11655,11 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             },
             if let Some(filter_has_document_type) = &self.filter_has_document_type {
                 format!("{filter_has_document_type:?}").into()
+            } else {
+                String::new().into()
+            },
+            if let Some(filter_has_storage_path) = &self.filter_has_storage_path {
+                format!("{filter_has_storage_path:?}").into()
             } else {
                 String::new().into()
             },
@@ -11538,8 +11703,15 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             "match_".into(),
             "is_insensitive".into(),
             "filter_has_tags".into(),
+            "filter_has_all_tags".into(),
+            "filter_has_not_tags".into(),
+            "filter_custom_field_query".into(),
+            "filter_has_not_correspondents".into(),
+            "filter_has_not_document_types".into(),
+            "filter_has_not_storage_paths".into(),
             "filter_has_correspondent".into(),
             "filter_has_document_type".into(),
+            "filter_has_storage_path".into(),
             "schedule_offset_days".into(),
             "schedule_is_recurring".into(),
             "schedule_recurring_interval_days".into(),
