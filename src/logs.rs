@@ -39,12 +39,13 @@ impl Logs {
         }
     }
 
-    #[doc = "Perform a `GET` request to `/api/logs/{id}/`.\n\nSingle log view\n\n**Parameters:**\n\n- `id: &'astr` (required)\n\n```rust,no_run\nasync fn example_logs_retrieve() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: Vec<String> = client.logs().retrieve(\"some-string\").await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `GET` request to `/api/logs/{id}/`.\n\nSingle log view\n\n**Parameters:**\n\n- `id: &'astr` (required)\n- `limit: Option<i64>`: Return only the last N entries from the log file\n\n```rust,no_run\nasync fn example_logs_retrieve() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    let result: Vec<String> = client\n        .logs()\n        .retrieve(\"some-string\", Some(4 as i64))\n        .await?;\n    println!(\"{:?}\", result);\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn retrieve<'a>(
         &'a self,
         id: &'a str,
+        limit: Option<i64>,
     ) -> Result<Vec<String>, crate::types::error::Error> {
         let mut req = self.client.client.request(
             http::Method::GET,
@@ -55,6 +56,12 @@ impl Logs {
             ),
         );
         req = req.header("Authorization", format!("Token {}", &self.client.token));
+        let mut query_params = vec![];
+        if let Some(p) = limit {
+            query_params.push(("limit", format!("{p}")));
+        }
+
+        req = req.query(&query_params);
         let resp = req.send().await?;
         let status = resp.status();
         if status.is_success() {
