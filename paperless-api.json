@@ -288,6 +288,7 @@
     "/api/correspondents/": {
       "get": {
         "operationId": "correspondents_list",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -401,6 +402,7 @@
       },
       "post": {
         "operationId": "correspondents_create",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "tags": [
           "correspondents"
         ],
@@ -452,6 +454,7 @@
     "/api/correspondents/{id}/": {
       "get": {
         "operationId": "correspondents_retrieve",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -499,6 +502,7 @@
       },
       "put": {
         "operationId": "correspondents_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -559,6 +563,7 @@
       },
       "patch": {
         "operationId": "correspondents_partial_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -618,6 +623,7 @@
       },
       "delete": {
         "operationId": "correspondents_destroy",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -653,6 +659,7 @@
     "/api/custom_fields/": {
       "get": {
         "operationId": "custom_fields_list",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -759,6 +766,7 @@
       },
       "post": {
         "operationId": "custom_fields_create",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "tags": [
           "custom_fields"
         ],
@@ -810,6 +818,7 @@
     "/api/custom_fields/{id}/": {
       "get": {
         "operationId": "custom_fields_retrieve",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -850,6 +859,7 @@
       },
       "put": {
         "operationId": "custom_fields_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -910,6 +920,7 @@
       },
       "patch": {
         "operationId": "custom_fields_partial_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -969,6 +980,7 @@
       },
       "delete": {
         "operationId": "custom_fields_destroy",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -1004,6 +1016,7 @@
     "/api/document_types/": {
       "get": {
         "operationId": "document_types_list",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -1117,6 +1130,7 @@
       },
       "post": {
         "operationId": "document_types_create",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "tags": [
           "document_types"
         ],
@@ -1168,6 +1182,7 @@
     "/api/document_types/{id}/": {
       "get": {
         "operationId": "document_types_retrieve",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -1215,6 +1230,7 @@
       },
       "put": {
         "operationId": "document_types_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -1275,6 +1291,7 @@
       },
       "patch": {
         "operationId": "document_types_partial_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -1334,6 +1351,7 @@
       },
       "delete": {
         "operationId": "document_types_destroy",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -2539,17 +2557,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EmailRequestRequest"
+                "$ref": "#/components/schemas/EmailDocumentRequestRequest"
               }
             },
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/EmailRequestRequest"
+                "$ref": "#/components/schemas/EmailDocumentRequestRequest"
               }
             },
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/EmailRequestRequest"
+                "$ref": "#/components/schemas/EmailDocumentRequestRequest"
               }
             }
           },
@@ -2566,12 +2584,13 @@
             "cookieAuth": []
           }
         ],
+        "deprecated": true,
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmailResponse"
+                  "$ref": "#/components/schemas/EmailDocumentResponse"
                 }
               }
             },
@@ -2735,24 +2754,6 @@
               "type": "integer"
             },
             "description": "Note ID to delete (used only for DELETE requests)"
-          },
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "description": "A page number within the paginated result set.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "page_size",
-            "required": false,
-            "in": "query",
-            "description": "Number of results to return per page.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
         "tags": [
@@ -2774,7 +2775,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedNotesList"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notes"
+                  }
                 }
               }
             },
@@ -2811,24 +2815,6 @@
               "type": "integer"
             },
             "description": "Note ID to delete (used only for DELETE requests)"
-          },
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "description": "A page number within the paginated result set.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "page_size",
-            "required": false,
-            "in": "query",
-            "description": "Number of results to return per page.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
         "tags": [
@@ -2870,7 +2856,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedNotesList"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notes"
+                  }
                 }
               }
             },
@@ -2907,24 +2896,6 @@
               "type": "integer"
             },
             "description": "Note ID to delete (used only for DELETE requests)"
-          },
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "description": "A page number within the paginated result set.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "page_size",
-            "required": false,
-            "in": "query",
-            "description": "Number of results to return per page.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
         "tags": [
@@ -2946,7 +2917,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedNotesList"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notes"
+                  }
                 }
               }
             },
@@ -3257,6 +3231,70 @@
               }
             },
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/documents/email/": {
+      "post": {
+        "operationId": "email_documents",
+        "description": "Email one or more documents as attachments to one or more recipients.",
+        "tags": [
+          "documents"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "PaperelessBasicAuthentication": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailDocumentsResponse"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "No response body"
+          },
+          "403": {
+            "description": "No response body"
+          },
+          "404": {
+            "description": "No response body"
+          },
+          "500": {
+            "description": "No response body"
           }
         }
       }
@@ -3764,6 +3802,14 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Return only the last N entries from the log file"
           }
         ],
         "tags": [
@@ -4541,6 +4587,172 @@
         }
       }
     },
+    "/api/processed_mail/": {
+      "get": {
+        "operationId": "processed_mail_list",
+        "parameters": [
+          {
+            "name": "ordering",
+            "required": false,
+            "in": "query",
+            "description": "Which field to use when ordering the results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rule",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "processed_mail"
+        ],
+        "security": [
+          {
+            "PaperelessBasicAuthentication": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedProcessedMailList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/processed_mail/{id}/": {
+      "get": {
+        "operationId": "processed_mail_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique integer value identifying this processed mail.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "processed_mail"
+        ],
+        "security": [
+          {
+            "PaperelessBasicAuthentication": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessedMail"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/processed_mail/bulk_delete/": {
+      "post": {
+        "operationId": "processed_mail_bulk_delete_create",
+        "tags": [
+          "processed_mail"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessedMailRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessedMailRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessedMailRequest"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "PaperelessBasicAuthentication": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessedMail"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/profile/": {
       "get": {
         "operationId": "profile_retrieve",
@@ -5306,6 +5518,7 @@
     "/api/share_links/": {
       "get": {
         "operationId": "share_links_list",
+        "description": "Pass a user object to serializer",
         "parameters": [
           {
             "in": "query",
@@ -5534,6 +5747,7 @@
       },
       "post": {
         "operationId": "share_links_create",
+        "description": "Pass a user object to serializer",
         "tags": [
           "share_links"
         ],
@@ -5584,6 +5798,7 @@
     "/api/share_links/{id}/": {
       "get": {
         "operationId": "share_links_retrieve",
+        "description": "Pass a user object to serializer",
         "parameters": [
           {
             "in": "path",
@@ -5598,124 +5813,6 @@
         "tags": [
           "share_links"
         ],
-        "security": [
-          {
-            "PaperelessBasicAuthentication": []
-          },
-          {
-            "tokenAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShareLink"
-                }
-              }
-            },
-            "description": ""
-          }
-        }
-      },
-      "put": {
-        "operationId": "share_links_update",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "A unique integer value identifying this share link.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "share_links"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShareLinkRequest"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/ShareLinkRequest"
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/ShareLinkRequest"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "PaperelessBasicAuthentication": []
-          },
-          {
-            "tokenAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShareLink"
-                }
-              }
-            },
-            "description": ""
-          }
-        }
-      },
-      "patch": {
-        "operationId": "share_links_partial_update",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer"
-            },
-            "description": "A unique integer value identifying this share link.",
-            "required": true
-          }
-        ],
-        "tags": [
-          "share_links"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchedShareLinkRequest"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchedShareLinkRequest"
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchedShareLinkRequest"
-              }
-            }
-          }
-        },
         "security": [
           {
             "PaperelessBasicAuthentication": []
@@ -5742,6 +5839,7 @@
       },
       "delete": {
         "operationId": "share_links_destroy",
+        "description": "Pass a user object to serializer",
         "parameters": [
           {
             "in": "path",
@@ -5842,6 +5940,7 @@
     "/api/storage_paths/": {
       "get": {
         "operationId": "storage_paths_list",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -5983,6 +6082,7 @@
       },
       "post": {
         "operationId": "storage_paths_create",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "tags": [
           "storage_paths"
         ],
@@ -6034,6 +6134,7 @@
     "/api/storage_paths/{id}/": {
       "get": {
         "operationId": "storage_paths_retrieve",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -6081,6 +6182,7 @@
       },
       "put": {
         "operationId": "storage_paths_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -6141,6 +6243,7 @@
       },
       "patch": {
         "operationId": "storage_paths_partial_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -6288,6 +6391,7 @@
     "/api/tags/": {
       "get": {
         "operationId": "tags_list",
+        "description": "Build a children map once to avoid per-parent queries in the serializer.",
         "parameters": [
           {
             "in": "query",
@@ -6315,6 +6419,14 @@
             "description": "Multiple values may be separated by commas.",
             "explode": false,
             "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "is_root",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Is root tag"
           },
           {
             "in": "query",
@@ -6401,6 +6513,7 @@
       },
       "post": {
         "operationId": "tags_create",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "tags": [
           "tags"
         ],
@@ -6452,6 +6565,7 @@
     "/api/tags/{id}/": {
       "get": {
         "operationId": "tags_retrieve",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "query",
@@ -6499,6 +6613,7 @@
       },
       "put": {
         "operationId": "tags_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -6559,6 +6674,7 @@
       },
       "patch": {
         "operationId": "tags_partial_update",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -6618,6 +6734,7 @@
       },
       "delete": {
         "operationId": "tags_destroy",
+        "description": "Mixin to add document count to queryset, permissions-aware if needed",
         "parameters": [
           {
             "in": "path",
@@ -9465,10 +9582,11 @@
           "float",
           "monetary",
           "documentlink",
-          "select"
+          "select",
+          "longtext"
         ],
         "type": "string",
-        "description": "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"
+        "description": "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"
       },
       "Database": {
         "type": "object",
@@ -9988,24 +10106,29 @@
           "name"
         ]
       },
-      "EmailRequestRequest": {
+      "EmailDocumentRequestRequest": {
         "type": "object",
         "properties": {
           "addresses": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "title": "Email addresses",
+            "description": "Comma-separated email addresses"
           },
           "subject": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "title": "Email subject"
           },
           "message": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "title": "Email message"
           },
           "use_archive_version": {
             "type": "boolean",
-            "default": true
+            "default": true,
+            "description": "Use archive version of documents if available"
           }
         },
         "required": [
@@ -10014,7 +10137,7 @@
           "subject"
         ]
       },
-      "EmailResponse": {
+      "EmailDocumentResponse": {
         "type": "object",
         "properties": {
           "message": {
@@ -10023,6 +10146,56 @@
         },
         "required": [
           "message"
+        ]
+      },
+      "EmailDocumentsResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "EmailRequest": {
+        "type": "object",
+        "properties": {
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "writeOnly": true
+          },
+          "addresses": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Email addresses",
+            "description": "Comma-separated email addresses"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Email subject"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Email message"
+          },
+          "use_archive_version": {
+            "type": "boolean",
+            "default": true,
+            "description": "Use archive version of documents if available"
+          }
+        },
+        "required": [
+          "addresses",
+          "documents",
+          "message",
+          "subject"
         ]
       },
       "FileVersionEnum": {
@@ -11230,7 +11403,7 @@
           }
         }
       },
-      "PaginatedNotesList": {
+      "PaginatedProcessedMailList": {
         "type": "object",
         "required": [
           "count",
@@ -11256,7 +11429,7 @@
           "results": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Notes"
+              "$ref": "#/components/schemas/ProcessedMail"
             }
           },
           "all": {
@@ -12454,22 +12627,6 @@
           }
         }
       },
-      "PatchedShareLinkRequest": {
-        "type": "object",
-        "properties": {
-          "expiration": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "document": {
-            "type": "integer"
-          },
-          "file_version": {
-            "$ref": "#/components/schemas/FileVersionEnum"
-          }
-        }
-      },
       "PatchedStoragePathRequest": {
         "type": "object",
         "properties": {
@@ -12620,6 +12777,10 @@
               }
             },
             "writeOnly": true
+          },
+          "parent": {
+            "type": "integer",
+            "nullable": true
           }
         }
       },
@@ -12706,8 +12867,7 @@
           "assign_title": {
             "type": "string",
             "nullable": true,
-            "description": "Assign a document title, can include some placeholders, see documentation.",
-            "maxLength": 256
+            "description": "Assign a document title, must  be a Jinja2 template, see documentation."
           },
           "assign_tags": {
             "type": "array",
@@ -12992,6 +13152,51 @@
             },
             "title": "Has these tag(s)"
           },
+          "filter_has_all_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Has all of these tag(s)"
+            },
+            "title": "Has all of these tag(s)"
+          },
+          "filter_has_not_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these tag(s)"
+            },
+            "title": "Does not have these tag(s)"
+          },
+          "filter_custom_field_query": {
+            "type": "string",
+            "nullable": true,
+            "description": "JSON-encoded custom field query expression."
+          },
+          "filter_has_not_correspondents": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these correspondent(s)"
+            },
+            "title": "Does not have these correspondent(s)"
+          },
+          "filter_has_not_document_types": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these document type(s)"
+            },
+            "title": "Does not have these document type(s)"
+          },
+          "filter_has_not_storage_paths": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these storage path(s)"
+            },
+            "title": "Does not have these storage path(s)"
+          },
           "filter_has_correspondent": {
             "type": "integer",
             "nullable": true,
@@ -13001,6 +13206,11 @@
             "type": "integer",
             "nullable": true,
             "title": "Has this document type"
+          },
+          "filter_has_storage_path": {
+            "type": "integer",
+            "nullable": true,
+            "title": "Has this storage path"
           },
           "schedule_offset_days": {
             "type": "integer",
@@ -13096,12 +13306,6 @@
             "title": "ASN"
           },
           "custom_fields": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "writeOnly": true,
-              "title": "Custom fields"
-            },
             "writeOnly": true
           },
           "from_webui": {
@@ -13113,6 +13317,74 @@
         "required": [
           "document"
         ]
+      },
+      "ProcessedMail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "owner": {
+            "type": "integer",
+            "nullable": true
+          },
+          "rule": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "folder": {
+            "type": "string",
+            "readOnly": true
+          },
+          "uid": {
+            "type": "string",
+            "readOnly": true
+          },
+          "subject": {
+            "type": "string",
+            "readOnly": true
+          },
+          "received": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "processed": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true
+          },
+          "error": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          }
+        },
+        "required": [
+          "error",
+          "folder",
+          "id",
+          "processed",
+          "received",
+          "rule",
+          "status",
+          "subject",
+          "uid"
+        ]
+      },
+      "ProcessedMailRequest": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
       },
       "Profile": {
         "type": "object",
@@ -13979,9 +14251,21 @@
           "user_can_change": {
             "type": "boolean",
             "readOnly": true
+          },
+          "parent": {
+            "type": "integer",
+            "nullable": true
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "readOnly": true
           }
         },
         "required": [
+          "children",
           "document_count",
           "id",
           "name",
@@ -14081,6 +14365,10 @@
               }
             },
             "writeOnly": true
+          },
+          "parent": {
+            "type": "integer",
+            "nullable": true
           }
         },
         "required": [
@@ -14569,8 +14857,7 @@
           "assign_title": {
             "type": "string",
             "nullable": true,
-            "description": "Assign a document title, can include some placeholders, see documentation.",
-            "maxLength": 256
+            "description": "Assign a document title, must  be a Jinja2 template, see documentation."
           },
           "assign_tags": {
             "type": "array",
@@ -14851,8 +15138,7 @@
           "assign_title": {
             "type": "string",
             "nullable": true,
-            "description": "Assign a document title, can include some placeholders, see documentation.",
-            "maxLength": 256
+            "description": "Assign a document title, must  be a Jinja2 template, see documentation."
           },
           "assign_tags": {
             "type": "array",
@@ -15245,6 +15531,51 @@
             },
             "title": "Has these tag(s)"
           },
+          "filter_has_all_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Has all of these tag(s)"
+            },
+            "title": "Has all of these tag(s)"
+          },
+          "filter_has_not_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these tag(s)"
+            },
+            "title": "Does not have these tag(s)"
+          },
+          "filter_custom_field_query": {
+            "type": "string",
+            "nullable": true,
+            "description": "JSON-encoded custom field query expression."
+          },
+          "filter_has_not_correspondents": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these correspondent(s)"
+            },
+            "title": "Does not have these correspondent(s)"
+          },
+          "filter_has_not_document_types": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these document type(s)"
+            },
+            "title": "Does not have these document type(s)"
+          },
+          "filter_has_not_storage_paths": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these storage path(s)"
+            },
+            "title": "Does not have these storage path(s)"
+          },
           "filter_has_correspondent": {
             "type": "integer",
             "nullable": true,
@@ -15254,6 +15585,11 @@
             "type": "integer",
             "nullable": true,
             "title": "Has this document type"
+          },
+          "filter_has_storage_path": {
+            "type": "integer",
+            "nullable": true,
+            "title": "Has this storage path"
           },
           "schedule_offset_days": {
             "type": "integer",
@@ -15368,6 +15704,51 @@
             },
             "title": "Has these tag(s)"
           },
+          "filter_has_all_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Has all of these tag(s)"
+            },
+            "title": "Has all of these tag(s)"
+          },
+          "filter_has_not_tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these tag(s)"
+            },
+            "title": "Does not have these tag(s)"
+          },
+          "filter_custom_field_query": {
+            "type": "string",
+            "nullable": true,
+            "description": "JSON-encoded custom field query expression."
+          },
+          "filter_has_not_correspondents": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these correspondent(s)"
+            },
+            "title": "Does not have these correspondent(s)"
+          },
+          "filter_has_not_document_types": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these document type(s)"
+            },
+            "title": "Does not have these document type(s)"
+          },
+          "filter_has_not_storage_paths": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "title": "Does not have these storage path(s)"
+            },
+            "title": "Does not have these storage path(s)"
+          },
           "filter_has_correspondent": {
             "type": "integer",
             "nullable": true,
@@ -15377,6 +15758,11 @@
             "type": "integer",
             "nullable": true,
             "title": "Has this document type"
+          },
+          "filter_has_storage_path": {
+            "type": "integer",
+            "nullable": true,
+            "title": "Has this storage path"
           },
           "schedule_offset_days": {
             "type": "integer",
