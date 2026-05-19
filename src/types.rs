@@ -2030,7 +2030,7 @@ impl tabled::Tabled for CorrespondentRequest {
 pub struct CustomField {
     pub id: i64,
     pub name: String,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     pub data_type: DataTypeEnum,
     #[doc = "Extra data for the custom field, such as select options"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2192,7 +2192,7 @@ impl tabled::Tabled for CustomFieldInstanceRequest {
 #[allow(non_snake_case)]
 pub struct CustomFieldRequest {
     pub name: String,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     pub data_type: DataTypeEnum,
     #[doc = "Extra data for the custom field, such as select options"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2229,7 +2229,7 @@ impl tabled::Tabled for CustomFieldRequest {
     }
 }
 
-#[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+#[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
 #[derive(
     serde :: Serialize,
     serde :: Deserialize,
@@ -2271,6 +2271,9 @@ pub enum DataTypeEnum {
     #[serde(rename = "select")]
     #[display("select")]
     Select,
+    #[serde(rename = "longtext")]
+    #[display("longtext")]
+    Longtext,
 }
 
 #[derive(
@@ -6257,7 +6260,7 @@ impl tabled::Tabled for PatchedCorrespondentRequest {
 pub struct PatchedCustomFieldRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select"]
+    #[doc = "* `string` - string\n* `url` - url\n* `date` - date\n* `boolean` - boolean\n* `integer` - integer\n* `float` - float\n* `monetary` - monetary\n* `documentlink` - documentlink\n* `select` - select\n* `longtext` - longtext"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub data_type: Option<DataTypeEnum>,
     #[doc = "Extra data for the custom field, such as select options"]
