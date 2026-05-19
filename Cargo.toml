@@ -1,7 +1,7 @@
 [package]
 name = "paperless-api-client"
 description = "Paperless-ngx API client"
-version = "6.0.1"
+version = "6.1.0"
 documentation = "https://docs.rs/paperless-api-client"
 readme = "README.md"
 
