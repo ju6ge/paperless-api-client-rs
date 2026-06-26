@@ -8737,6 +8737,119 @@ impl tabled::Tabled for Profile {
     }
 }
 
+#[doc = "* `0` - title contains\n* `1` - content contains\n* `2` - ASN is\n* `3` - correspondent is\n* `4` - document type is\n* `5` - is in inbox\n* `6` - has tag\n* `7` - has any tag\n* `8` - created before\n* `9` - created after\n* `10` - created year is\n* `11` - created month is\n* `12` - created day is\n* `13` - added before\n* `14` - added after\n* `15` - modified before\n* `16` - modified after\n* `17` - does not have tag\n* `18` - does not have ASN\n* `19` - title or content contains\n* `20` - fulltext query\n* `21` - more like this\n* `22` - has tags in\n* `23` - ASN greater than\n* `24` - ASN less than\n* `25` - storage path is\n* `26` - has correspondent in\n* `27` - does not have correspondent in\n* `28` - has document type in\n* `29` - does not have document type in\n* `30` - has storage path in\n* `31` - does not have storage path in\n* `32` - owner is\n* `33` - has owner in\n* `34` - does not have owner\n* `35` - does not have owner in\n* `36` - has custom field value\n* `37` - is shared by me\n* `38` - has custom fields\n* `39` - has custom field in\n* `40` - does not have custom field in\n* `41` - does not have custom field\n* `42` - custom fields query\n* `43` - created to\n* `44` - created from\n* `45` - added to\n* `46` - added from\n* `47` - mime type is"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum RuleTypeEnum {
+    #[doc = "title contains"]
+    TitleContains = 0,
+    #[doc = "content contains"]
+    ContentContains = 1,
+    #[doc = "ASN is"]
+    AsnIs = 2,
+    #[doc = "correspondent is"]
+    CorrespondentIs = 3,
+    #[doc = "document type is"]
+    DocumentTypeIs = 4,
+    #[doc = "is in inbox"]
+    IsInInbox = 5,
+    #[doc = "has tag"]
+    HasTag = 6,
+    #[doc = "has any tag"]
+    HasAnyTag = 7,
+    #[doc = "created before"]
+    CreatedBefore = 8,
+    #[doc = "created after"]
+    CreatedAfter = 9,
+    #[doc = "created year is"]
+    CreatedYearIs = 10,
+    #[doc = "created month is"]
+    CreatedMonthIs = 11,
+    #[doc = "created day is"]
+    CreatedDayIs = 12,
+    #[doc = "added before"]
+    AddedBefore = 13,
+    #[doc = "added after"]
+    AddedAfter = 14,
+    #[doc = "modified before"]
+    ModifiedBefore = 15,
+    #[doc = "modified after"]
+    ModifiedAfter = 16,
+    #[doc = "does not have tag"]
+    DoesNotHaveTag = 17,
+    #[doc = "does not have ASN"]
+    DoesNotHaveASN = 18,
+    #[doc = "title or content contains"]
+    TitleOrContentContains = 19,
+    #[doc = "fulltext query"]
+    FulltextQuery = 20,
+    #[doc = "more like this"]
+    MoreLikeThis = 21,
+    #[doc = "has tags in"]
+    HasTagsIn = 22,
+    #[doc = "ASN greater than"]
+    AsnGreaterThan = 23,
+    #[doc = "ASN less than"]
+    AsnLessThan = 24,
+    #[doc = "storage path is"]
+    StoragePathIs = 25,
+    #[doc = "has correspondent in"]
+    HasCorrespondentIn = 26,
+    #[doc = "does not have correspondent in"]
+    DoesNotHaveCorrespondentIn = 27,
+    #[doc = "has document type in"]
+    HasDocumentTypeIn = 28,
+    #[doc = "does not have document type in"]
+    DoesNotHaveDocumentTypeIn = 29,
+    #[doc = "has storage path in"]
+    HasStoragePathIn = 30,
+    #[doc = "does not have storage path in"]
+    DoesNotHaveStoragePathIn = 31,
+    #[doc = "owner is"]
+    OwnerIs = 32,
+    #[doc = "has owner in"]
+    HasOwnerIn = 33,
+    #[doc = "does not have owner"]
+    DoesNotHaveOwner = 34,
+    #[doc = "does not have owner in"]
+    DoesNotHaveOwnerIn = 35,
+    #[doc = "has custom field value"]
+    HasCustomFieldValue = 36,
+    #[doc = "is shared by me"]
+    IsSharedByMe = 37,
+    #[doc = "has custom fields"]
+    HasCustomFields = 38,
+    #[doc = "has custom field in"]
+    HasCustomFieldIn = 39,
+    #[doc = "does not have custom field in"]
+    DoesNotHaveCustomFieldIn = 40,
+    #[doc = "does not have custom field"]
+    DoesNotHaveCustomField = 41,
+    #[doc = "custom fields query"]
+    CustomFieldsQuery = 42,
+    #[doc = "created to"]
+    CreatedTo = 43,
+    #[doc = "created from"]
+    CreatedFrom = 44,
+    #[doc = "added to"]
+    AddedTo = 45,
+    #[doc = "added from"]
+    AddedFrom = 46,
+    #[doc = "mime type is"]
+    MimeTypeIs = 47,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -8875,7 +8988,7 @@ impl tabled::Tabled for SavedView {
 )]
 #[allow(non_snake_case)]
 pub struct SavedViewFilterRule {
-    pub rule_type: i64,
+    pub rule_type: RuleTypeEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
@@ -8914,7 +9027,7 @@ impl tabled::Tabled for SavedViewFilterRule {
 )]
 #[allow(non_snake_case)]
 pub struct SavedViewFilterRuleRequest {
-    pub rule_type: i64,
+    pub rule_type: RuleTypeEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
