@@ -1206,6 +1206,29 @@ pub enum AssignCorrespondentFromEnum {
     UseCorrespondentSelectedBelow = 4,
 }
 
+#[doc = "* `1` - Use subject as title\n* `2` - Use attachment filename as title\n* `3` - Do not assign title from rule"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AssignTitleFromEnum {
+    #[doc = "Use subject as title"]
+    UseSubjectAsTitle = 1,
+    #[doc = "Use attachment filename as title"]
+    UseAttachmentFilenameAsTitle = 2,
+    #[doc = "Do not assign title from rule"]
+    DoNotAssignTitleFromRule = 3,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3642,7 +3665,7 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3869,7 +3892,7 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6964,7 +6987,7 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
