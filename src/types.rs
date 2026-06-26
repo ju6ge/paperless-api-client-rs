@@ -1229,6 +1229,27 @@ pub enum AssignTitleFromEnum {
     DoNotAssignTitleFromRule = 3,
 }
 
+#[doc = "* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AttachmentTypeEnum {
+    #[doc = "Only process attachments."]
+    OnlyProcessAttachments = 1,
+    #[doc = "Process all files, including 'inline' attachments."]
+    ProcessAllFilesIncludingInlineAttachments = 2,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3680,7 +3701,7 @@ pub struct MailRule {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3907,7 +3928,7 @@ pub struct MailRuleRequest {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7002,7 +7023,7 @@ pub struct PatchedMailRuleRequest {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
