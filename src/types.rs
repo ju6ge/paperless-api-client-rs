@@ -3751,7 +3751,7 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     pub user_can_change: bool,
@@ -4005,7 +4005,7 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7131,7 +7131,7 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -8425,6 +8425,33 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             "schedule_date_custom_field".into(),
         ]
     }
+}
+
+#[doc = "* `0` - System default\n* `1` - Text, then HTML\n* `2` - HTML, then text\n* `3` - HTML only\n* `4` - Text only"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum PdfLayoutEnum {
+    #[doc = "System default"]
+    SystemDefault = 0,
+    #[doc = "Text, then HTML"]
+    TextThenHTML = 1,
+    #[doc = "HTML, then text"]
+    HtmlThenText = 2,
+    #[doc = "HTML only"]
+    HtmlOnly = 3,
+    #[doc = "Text only"]
+    TextOnly = 4,
 }
 
 #[derive(
