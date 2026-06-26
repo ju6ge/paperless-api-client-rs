@@ -8211,7 +8211,7 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default)]
     pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowTriggerTypeEnum>,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -11950,7 +11950,7 @@ pub struct WorkflowTrigger {
     #[serde(default)]
     pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
-    pub type_: i64,
+    pub type_: WorkflowTriggerTypeEnum,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -12172,7 +12172,7 @@ pub struct WorkflowTriggerRequest {
     #[serde(default)]
     pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
-    pub type_: i64,
+    pub type_: WorkflowTriggerTypeEnum,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -12382,6 +12382,31 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             "schedule_date_custom_field".into(),
         ]
     }
+}
+
+#[doc = "* `1` - Consumption Started\n* `2` - Document Added\n* `3` - Document Updated\n* `4` - Scheduled"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowTriggerTypeEnum {
+    #[doc = "Consumption Started"]
+    ConsumptionStarted = 1,
+    #[doc = "Document Added"]
+    DocumentAdded = 2,
+    #[doc = "Document Updated"]
+    DocumentUpdated = 3,
+    #[doc = "Scheduled"]
+    Scheduled = 4,
 }
 
 #[derive(
