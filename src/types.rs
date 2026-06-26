@@ -8221,7 +8221,7 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -11985,7 +11985,7 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -12187,6 +12187,35 @@ impl tabled::Tabled for WorkflowTrigger {
     }
 }
 
+#[doc = "* `0` - None\n* `1` - Any word\n* `2` - All words\n* `3` - Exact match\n* `4` - Regular expression\n* `5` - Fuzzy word"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowTriggerMatchingAlgorithmEnum {
+    #[doc = "None"]
+    None = 0,
+    #[doc = "Any word"]
+    AnyWord = 1,
+    #[doc = "All words"]
+    AllWords = 2,
+    #[doc = "Exact match"]
+    ExactMatch = 3,
+    #[doc = "Regular expression"]
+    RegularExpression = 4,
+    #[doc = "Fuzzy word"]
+    FuzzyWord = 5,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -12207,7 +12236,7 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
