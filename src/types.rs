@@ -1711,6 +1711,29 @@ pub enum CompressionEnum {
     Lzma,
 }
 
+#[doc = "* `1` - Only process attachments.\n* `2` - Process full Mail (with embedded attachments in file) as .eml\n* `3` - Process full Mail (with embedded attachments in file) as .eml + process attachments as separate documents"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum ConsumptionScopeEnum {
+    #[doc = "Only process attachments."]
+    OnlyProcessAttachments = 1,
+    #[doc = "Process full Mail (with embedded attachments in file) as .eml"]
+    ProcessFullMailWithEmbeddedAttachmentsInFileAsEml = 2,
+    #[doc = "Process full Mail (with embedded attachments in file) as .eml + process attachments as separate documents"]
+    ProcessFullMailWithEmbeddedAttachmentsInFileAsEmlProcessAttachmentsAsSeparateDocuments = 3,
+}
+
 #[doc = "* `archive` - archive\n* `originals` - originals\n* `both` - both"]
 #[derive(
     serde :: Serialize,
@@ -3703,7 +3726,7 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pdf_layout: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3930,7 +3953,7 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pdf_layout: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7025,7 +7048,7 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pdf_layout: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
