@@ -480,6 +480,29 @@ pub mod error {
     }
 }
 
+#[doc = "* `1` - IMAP\n* `2` - Gmail OAuth\n* `3` - Outlook OAuth"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AccountTypeEnum {
+    #[doc = "IMAP"]
+    Imap = 1,
+    #[doc = "Gmail OAuth"]
+    GmailOAuth = 2,
+    #[doc = "Outlook OAuth"]
+    OutlookOAuth = 3,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3300,7 +3323,7 @@ pub struct MailAccount {
     pub owner: Option<i64>,
     pub user_can_change: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
@@ -3443,7 +3466,7 @@ pub struct MailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
@@ -6778,7 +6801,7 @@ pub struct PatchedMailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
