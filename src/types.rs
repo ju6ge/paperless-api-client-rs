@@ -1181,6 +1181,31 @@ impl tabled::Tabled for ApplicationConfigurationRequest {
     }
 }
 
+#[doc = "* `1` - Do not assign a correspondent\n* `2` - Use mail address\n* `3` - Use name (or mail address if not available)\n* `4` - Use correspondent selected below"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AssignCorrespondentFromEnum {
+    #[doc = "Do not assign a correspondent"]
+    DoNotAssignACorrespondent = 1,
+    #[doc = "Use mail address"]
+    UseMailAddress = 2,
+    #[doc = "Use name (or mail address if not available)"]
+    UseNameOrMailAddressIfNotAvailable = 3,
+    #[doc = "Use correspondent selected below"]
+    UseCorrespondentSelectedBelow = 4,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3621,7 +3646,7 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3848,7 +3873,7 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6943,7 +6968,7 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
