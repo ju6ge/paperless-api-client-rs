@@ -7841,7 +7841,7 @@ pub struct PatchedWorkflowActionRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -10992,7 +10992,7 @@ pub struct WorkflowAction {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -11407,7 +11407,7 @@ pub struct WorkflowActionRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -11694,6 +11694,31 @@ impl tabled::Tabled for WorkflowActionRequest {
             "webhook".into(),
         ]
     }
+}
+
+#[doc = "* `1` - Assignment\n* `2` - Removal\n* `3` - Email\n* `4` - Webhook"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowActionTypeEnum {
+    #[doc = "Assignment"]
+    Assignment = 1,
+    #[doc = "Removal"]
+    Removal = 2,
+    #[doc = "Email"]
+    Email = 3,
+    #[doc = "Webhook"]
+    Webhook = 4,
 }
 
 #[derive(
