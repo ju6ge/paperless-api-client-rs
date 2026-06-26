@@ -3309,6 +3309,29 @@ impl tabled::Tabled for GroupRequest {
     }
 }
 
+#[doc = "* `1` - No encryption\n* `2` - Use SSL\n* `3` - Use STARTTLS"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum ImapSecurityEnum {
+    #[doc = "No encryption"]
+    NoEncryption = 1,
+    #[doc = "Use SSL"]
+    UseSSL = 2,
+    #[doc = "Use STARTTLS"]
+    UseSTARTTLS = 3,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3403,7 +3426,7 @@ pub struct MailAccount {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     pub username: String,
     pub password: String,
     #[doc = "The character set to use when communicating with the mail server, such as 'UTF-8' or 'US-ASCII'."]
@@ -3545,7 +3568,7 @@ pub struct MailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     pub username: String,
     pub password: String,
     #[doc = "The character set to use when communicating with the mail server, such as 'UTF-8' or 'US-ASCII'."]
@@ -6909,7 +6932,7 @@ pub struct PatchedMailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
