@@ -801,7 +801,7 @@ fn get_example_args(
         // Let's get the example rust code for the schema.
         let mut example = crate::types::example::generate_example_rust_from_schema(
             type_space,
-            &t.rendered()?,
+            &t.strip_option()?.rendered()?,
             &schema.expand(&type_space.spec)?,
             false,
         )?;
