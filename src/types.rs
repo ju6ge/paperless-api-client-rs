@@ -8209,7 +8209,7 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
     pub type_: Option<i64>,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
@@ -9511,6 +9511,31 @@ impl tabled::Tabled for SocialAccountRequest {
     fn headers() -> Vec<std::borrow::Cow<'static, str>> {
         vec!["provider".into()]
     }
+}
+
+#[doc = "* `1` - Consume Folder\n* `2` - Api Upload\n* `3` - Mail Fetch\n* `4` - Web UI"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum SourcesEnum {
+    #[doc = "Consume Folder"]
+    ConsumeFolder = 1,
+    #[doc = "Api Upload"]
+    ApiUpload = 2,
+    #[doc = "Mail Fetch"]
+    MailFetch = 3,
+    #[doc = "Web UI"]
+    WebUI = 4,
 }
 
 #[doc = "* `FAILURE` - FAILURE\n* `PENDING` - PENDING\n* `RECEIVED` - RECEIVED\n* `RETRY` - RETRY\n* `REVOKED` - REVOKED\n* `STARTED` - STARTED\n* `SUCCESS` - SUCCESS"]
@@ -11923,7 +11948,7 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
     pub type_: i64,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
@@ -12145,7 +12170,7 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
     pub type_: i64,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
