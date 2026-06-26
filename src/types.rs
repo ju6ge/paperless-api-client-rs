@@ -3728,7 +3728,7 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3925,6 +3925,33 @@ impl tabled::Tabled for MailRule {
     }
 }
 
+#[doc = "* `1` - Delete\n* `2` - Move to specified folder\n* `3` - Mark as read, don't process read mails\n* `4` - Flag the mail, don't process flagged mails\n* `5` - Tag the mail with specified tag, don't process tagged mails"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum MailRuleActionEnum {
+    #[doc = "Delete"]
+    Delete = 1,
+    #[doc = "Move to specified folder"]
+    MoveToSpecifiedFolder = 2,
+    #[doc = "Mark as read, don't process read mails"]
+    MarkAsReadDonTProcessReadMails = 3,
+    #[doc = "Flag the mail, don't process flagged mails"]
+    FlagTheMailDonTProcessFlaggedMails = 4,
+    #[doc = "Tag the mail with specified tag, don't process tagged mails"]
+    TagTheMailWithSpecifiedTagDonTProcessTaggedMails = 5,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3955,7 +3982,7 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7081,7 +7108,7 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
