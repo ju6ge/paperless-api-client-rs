@@ -1903,7 +1903,7 @@ pub struct Correspondent {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -2073,7 +2073,7 @@ pub struct CorrespondentRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2883,7 +2883,7 @@ pub struct DocumentType {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -2996,7 +2996,7 @@ pub struct DocumentTypeRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -4130,6 +4130,37 @@ impl tabled::Tabled for MailRuleRequest {
             "set_permissions".into(),
         ]
     }
+}
+
+#[doc = "* `0` - None\n* `1` - Any word\n* `2` - All words\n* `3` - Exact match\n* `4` - Regular expression\n* `5` - Fuzzy word\n* `6` - Automatic"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum MatchingAlgorithm {
+    #[doc = "None"]
+    None = 0,
+    #[doc = "Any word"]
+    AnyWord = 1,
+    #[doc = "All words"]
+    AllWords = 2,
+    #[doc = "Exact match"]
+    ExactMatch = 3,
+    #[doc = "Regular expression"]
+    RegularExpression = 4,
+    #[doc = "Fuzzy word"]
+    FuzzyWord = 5,
+    #[doc = "Automatic"]
+    Automatic = 6,
 }
 
 #[derive(
@@ -6473,7 +6504,7 @@ pub struct PatchedCorrespondentRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6752,7 +6783,7 @@ pub struct PatchedDocumentTypeRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7449,7 +7480,7 @@ pub struct PatchedStoragePathRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7536,7 +7567,7 @@ pub struct PatchedTagRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
@@ -9376,7 +9407,7 @@ pub struct StoragePath {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -9489,7 +9520,7 @@ pub struct StoragePathRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -9674,7 +9705,7 @@ pub struct Tag {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
@@ -9815,7 +9846,7 @@ pub struct TagRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
