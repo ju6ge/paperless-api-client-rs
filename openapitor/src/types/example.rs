@@ -11,6 +11,7 @@ use crate::types::{
     exts::{ReferenceOrExt, SchemaRenderExt, TokenStreamExt},
     get_schema_from_any, is_default_property,
     random::Random,
+    resolve_enum_variant_names,
 };
 
 /// Generates examples for our JSON schema types.
@@ -166,6 +167,23 @@ pub fn generate_example_json_from_schema(
             }
         },
         openapiv3::SchemaKind::Type(openapiv3::Type::Integer(i)) => {
+            if !i.enumeration.is_empty() {
+                // We have an enum type.
+                // Return a random value from the enum.
+                let values = i.enumeration.to_vec();
+                let values = values
+                    .into_iter()
+                    .filter(|v| v.is_some())
+                    .collect::<Vec<_>>();
+                let index = rng.random_range(0..values.len());
+                let val = values[index]
+                    .as_ref()
+                    .ok_or_else(|| anyhow::anyhow!("enum has null value at index {}", index))?;
+                return Ok(serde_json::Value::Number(serde_json::value::Number::from(
+                    *val as i64,
+                )));
+            }
+
             match &i.format {
                 openapiv3::VariantOrUnknownOrEmpty::Item(openapiv3::IntegerFormat::Int32) => {
                     serde_json::from_str(&i32::random()?.to_string())?
@@ -394,11 +412,50 @@ pub fn generate_example_rust_from_schema(
             t = t.strip_option()?;
             quote!(3.14 as #t)
         }
-        openapiv3::SchemaKind::Type(openapiv3::Type::Integer(_)) => {
-            let mut t =
-                crate::types::get_type_name_for_schema(name, schema, &type_space.spec, in_crate)?;
-            t = t.strip_option()?;
-            quote!(4 as #t)
+        openapiv3::SchemaKind::Type(openapiv3::Type::Integer(i)) => {
+            if !i.enumeration.is_empty() {
+                let name_ident = crate::types::get_type_name_for_schema(
+                    name,
+                    schema,
+                    &type_space.spec,
+                    in_crate,
+                )?
+                .strip_option()?;
+                // Get a random item from the enum.
+                let random_value =
+                    generate_example_json_from_schema(schema, &type_space.spec)?.to_string();
+                let int_val: i64 = random_value
+                    .trim_start_matches('"')
+                    .trim_end_matches('"')
+                    .parse()
+                    .map_err(|err| {
+                        anyhow::anyhow!("Failed to parse integer enum value: {}", err)
+                    })?;
+                // Look up the actual variant name from the schema's parsed descriptions.
+                let descriptions = if let Some(ref desc) = schema.schema_data.description {
+                    crate::types::parse_enum_description(desc)
+                } else {
+                    Default::default()
+                };
+                let variant_names = resolve_enum_variant_names(i, &descriptions);
+                let variant_name = variant_names
+                    .get(&int_val)
+                    .cloned()
+                    .unwrap_or_else(|| crate::types::proper_name(&int_val.to_string()));
+                let item_ident: proc_macro2::TokenStream = variant_name.parse().map_err(|err| {
+                    anyhow::anyhow!("Failed to parse integer enum variant name: {}", err)
+                })?;
+                quote!(#name_ident::#item_ident)
+            } else {
+                let mut t = crate::types::get_type_name_for_schema(
+                    name,
+                    schema,
+                    &type_space.spec,
+                    in_crate,
+                )?;
+                t = t.strip_option()?;
+                quote!(4 as #t)
+            }
         }
         openapiv3::SchemaKind::Type(openapiv3::Type::Object(o)) => {
             let object_name =
