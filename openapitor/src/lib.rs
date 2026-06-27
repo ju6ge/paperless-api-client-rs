@@ -611,6 +611,7 @@ schemars = {{ version = "0.8.17", features = ["bigdecimal04", "bytes", "chrono",
 serde = {{ version = "1", features = ["derive"] }}
 serde_bytes = "0.11"
 serde_json = "1"
+serde_repr = "0.1"
 serde_urlencoded = {{ version = "^0.7", optional = true }}
 tabled = {{ version = "0.18.0", features = ["ansi"], optional = true }}
 thiserror = "2"
