@@ -488,6 +488,13 @@ impl SchemaRenderExt for openapiv3::ReferenceOr<Box<openapiv3::Schema>> {
                             Ok(false)
                         }
                     }
+                    openapiv3::SchemaKind::Type(openapiv3::Type::Integer(i)) => {
+                        if !i.enumeration.is_empty() {
+                            Ok(true)
+                        } else {
+                            Ok(false)
+                        }
+                    }
                     openapiv3::SchemaKind::Type(openapiv3::Type::Object(o)) => {
                         if o.properties.is_empty() {
                             Ok(false)
