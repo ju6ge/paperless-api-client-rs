@@ -12,6 +12,11 @@ This changelog is to keep track of changes to this crate and their compatibilty 
 
 ## Unreleased
 
+## 2026-06-27 paperless-api-client 6.2.0
+
+No new paperles api version sync, keep major version 6, but increase to minor version 2 because introduciton of enums is a breaking change
+in regards to the rust client api.
+
 ### Added
 - introduce enums for all interger select fields
 

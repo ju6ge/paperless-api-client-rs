@@ -23,7 +23,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! paperless-api-client = "6.0.1"
+//! paperless-api-client = "6.2.0"
 //! ```
 //!
 //! ## Basic example
