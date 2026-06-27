@@ -1150,6 +1150,152 @@ impl TypeSpace {
         Ok(())
     }
 
+    /// Render the full type for an integer enum.
+    fn render_enum_from_integers(
+        &mut self,
+        name: &str,
+        s: &openapiv3::IntegerType,
+        data: &openapiv3::SchemaData,
+    ) -> Result<()> {
+        if s.enumeration.is_empty() {
+            anyhow::bail!("Cannot render empty integer enumeration: {}", name);
+        }
+
+        // Get the proper name version of the name of the enum.
+        let enum_name = get_type_name(name, data)?;
+
+        // Parse description for human-readable variant names.
+        let descriptions: BTreeMap<i64, String> = if let Some(desc) = &data.description {
+            parse_enum_description(desc)
+        } else {
+            BTreeMap::new()
+        };
+
+        let enum_description = if let Some(d) = &data.description {
+            let d_sanitized = sanitize_indents(d, enum_name.to_string());
+            quote!(#[doc = #d_sanitized])
+        } else {
+            quote!()
+        };
+
+        // Resolve variant names using the shared function.
+        let variant_names = resolve_enum_variant_names(s, &descriptions);
+
+        // Build variant info for code generation.
+        struct VariantInfo {
+            name: String,
+            value: i64,
+            doc: Option<String>,
+        }
+
+        let mut variant_infos: Vec<VariantInfo> = Vec::new();
+
+        for e in s.enumeration.iter() {
+            if e.is_none() {
+                if !data.nullable {
+                    anyhow::bail!("enum `{}` is not nullable, but it has a null value", name);
+                }
+                continue;
+            }
+
+            let val = e.as_ref().unwrap();
+            let value = *val;
+            let name = variant_names
+                .get(&value)
+                .expect("variant name should exist for enumeration value")
+                .clone();
+
+            // Get doc comment for this variant.
+            let doc = descriptions
+                .get(&value)
+                .map(|d| sanitize_indents(d, name.clone()).to_string());
+
+            variant_infos.push(VariantInfo { name, value, doc });
+        }
+
+        // Second pass: generate code.
+        let mut variant_decls = quote!();
+
+        for info in &variant_infos {
+            let variant_ident: proc_macro2::TokenStream = info.name.parse().unwrap();
+            let variant_value = info.value;
+            let variant_value_lit = proc_macro2::Literal::i64_unsuffixed(variant_value);
+            let variant_doc = if let Some(ref d) = info.doc {
+                quote!(#[doc = #d])
+            } else {
+                quote!()
+            };
+
+            // Variant with repr value.
+            let variant = quote!(
+                #variant_doc
+                #variant_ident = #variant_value_lit,
+            );
+
+            variant_decls = quote!(#variant_decls #variant);
+        }
+
+        // If the data for the enum has a default value, implement default for the enum.
+        let default = if let Some(default) = &data.default {
+            let default_val = default.to_string().parse::<i64>().ok();
+            if let Some(dv) = default_val {
+                if let Some(info) = variant_infos.iter().find(|v| v.value == dv) {
+                    let default_ident: proc_macro2::TokenStream = info.name.parse().unwrap();
+                    quote!(
+                        impl std::default::Default for #enum_name {
+                            fn default() -> Self {
+                                #enum_name::#default_ident
+                            }
+                        }
+                    )
+                } else {
+                    quote!()
+                }
+            } else {
+                quote!()
+            }
+        } else if variant_infos.len() == 1 {
+            let info = &variant_infos[0];
+            let default_ident: proc_macro2::TokenStream = info.name.parse().unwrap();
+            quote!(
+                impl std::default::Default for #enum_name {
+                    fn default() -> Self {
+                        #enum_name::#default_ident
+                    }
+                }
+            )
+        } else {
+            quote!()
+        };
+
+        let rendered = quote! {
+            #enum_description
+            #[derive(serde_repr::Serialize_repr, serde_repr::Deserialize_repr, PartialEq, Hash, Debug, Clone, Copy, schemars::JsonSchema)]
+            #[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+            #[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+            #[repr(i64)]
+            pub enum #enum_name {
+        #variant_decls
+            }
+
+            #default
+        };
+
+        // Add the type to the list of types, if it doesn't already exist.
+        self.add_to_rendered(
+            &rendered,
+            (
+                enum_name.to_string(),
+                openapiv3::Schema {
+                    schema_data: data.clone(),
+                    schema_kind: SchemaKind::Type(openapiv3::Type::Integer(s.clone())),
+                },
+            ),
+        )?;
+
+        Ok(())
+    }
+
     // Render the internal enum type for an object.
     fn render_enum_object_internal(
         &mut self,
