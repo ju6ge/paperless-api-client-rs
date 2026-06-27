@@ -2110,6 +2110,47 @@ pub(crate) fn parse_enum_description(desc: &str) -> BTreeMap<i64, String> {
     result
 }
 
+/// Resolve all variant names for an integer enum based on the enumeration values
+/// and parsed descriptions. Returns a BTreeMap<i64, String> mapping enum values
+/// to their resolved variant names (e.g., 0 -> "None", 1 -> "AnyWord").
+///
+/// This must be called from both `render_enum_from_integers` and `example.rs`
+/// to ensure generated code and examples use the exact same variant names.
+pub(crate) fn resolve_enum_variant_names(
+    s: &openapiv3::IntegerType,
+    descriptions: &BTreeMap<i64, String>,
+) -> BTreeMap<i64, String> {
+    let mut variant_names: BTreeMap<i64, String> = BTreeMap::new();
+    let mut seen_names: std::collections::HashSet<String> = std::collections::HashSet::new();
+
+    for e in &s.enumeration {
+        if e.is_none() {
+            continue;
+        }
+
+        let val = *e.as_ref().unwrap();
+
+        // Determine the variant name for this value
+        let candidate = if let Some(desc) = descriptions.get(&val) {
+            proper_name(&desc)
+        } else {
+            proper_name(&val.to_string())
+        };
+
+        let mut name = candidate.clone();
+        let mut suffix = 1;
+        while seen_names.contains(&name) {
+            name = format!("{}_{}", candidate, suffix);
+            suffix += 1;
+        }
+        seen_names.insert(name.clone());
+
+        variant_names.insert(val, name);
+    }
+
+    variant_names
+}
+
 /// Return the name for a type based on a name if passed or the title of the schema data.
 fn get_type_name(name: &str, data: &openapiv3::SchemaData) -> Result<proc_macro2::Ident> {
     let t = if !name.is_empty() {
