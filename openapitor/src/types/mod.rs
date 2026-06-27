@@ -211,8 +211,12 @@ impl TypeSpace {
         match &schema.schema_kind {
             // Don't render primitive types.
             SchemaKind::Type(openapiv3::Type::Number(_))
-            | SchemaKind::Type(openapiv3::Type::Boolean { .. })
-            | SchemaKind::Type(openapiv3::Type::Integer(_)) => Ok(()),
+            | SchemaKind::Type(openapiv3::Type::Boolean { .. }) => Ok(()),
+
+            // Integer types may have enumerations that need to be rendered as enums.
+            SchemaKind::Type(openapiv3::Type::Integer(i)) => {
+                self.render_integer_type(name, i, &schema.schema_data)
+            }
 
             // The remaining types are complex (non-primitive)
             // and do need to be rendered.
