@@ -10,6 +10,14 @@ meaningful way according to semver!
 
 This changelog is to keep track of changes to this crate and their compatibilty to paperless-ngx api versions
 
+## Unreleased
+
+### Added
+- introduce enums for all interger select fields
+
+### Fixed
+- update all doc tests and get them working
+
 ## 2026-05-19 paperless-api-client 6.1.0
 
 Sync api client with paperless version v2.20.15 api version according to openapi-spec 6.0.0 (9)

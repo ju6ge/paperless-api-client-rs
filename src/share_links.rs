@@ -352,7 +352,7 @@ impl ShareLinks {
         }
     }
 
-    #[doc = "Perform a `DELETE` request to `/api/share_links/{id}/`.\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_destroy() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    client.share_links().destroy(4 as i64).await?;\n    Ok(())\n}\n```"]
+    #[doc = "Perform a `DELETE` request to `/api/share_links/{id}/`.\n\nPass a user object to serializer\n\n**Parameters:**\n\n- `id: i64`: A unique integer value identifying this share link. (required)\n\n```rust,no_run\nasync fn example_share_links_destroy() -> anyhow::Result<()> {\n    let client = paperless_api_client::Client::new_from_env();\n    client.share_links().destroy(4 as i64).await?;\n    Ok(())\n}\n```"]
     #[tracing::instrument]
     #[allow(non_snake_case)]
     pub async fn destroy<'a>(&'a self, id: i64) -> Result<(), crate::types::error::Error> {

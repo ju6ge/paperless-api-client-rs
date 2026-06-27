@@ -480,6 +480,29 @@ pub mod error {
     }
 }
 
+#[doc = "* `1` - IMAP\n* `2` - Gmail OAuth\n* `3` - Outlook OAuth"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AccountTypeEnum {
+    #[doc = "IMAP"]
+    Imap = 1,
+    #[doc = "Gmail OAuth"]
+    GmailOAuth = 2,
+    #[doc = "Outlook OAuth"]
+    OutlookOAuth = 3,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -1158,6 +1181,75 @@ impl tabled::Tabled for ApplicationConfigurationRequest {
     }
 }
 
+#[doc = "* `1` - Do not assign a correspondent\n* `2` - Use mail address\n* `3` - Use name (or mail address if not available)\n* `4` - Use correspondent selected below"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AssignCorrespondentFromEnum {
+    #[doc = "Do not assign a correspondent"]
+    DoNotAssignACorrespondent = 1,
+    #[doc = "Use mail address"]
+    UseMailAddress = 2,
+    #[doc = "Use name (or mail address if not available)"]
+    UseNameOrMailAddressIfNotAvailable = 3,
+    #[doc = "Use correspondent selected below"]
+    UseCorrespondentSelectedBelow = 4,
+}
+
+#[doc = "* `1` - Use subject as title\n* `2` - Use attachment filename as title\n* `3` - Do not assign title from rule"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AssignTitleFromEnum {
+    #[doc = "Use subject as title"]
+    UseSubjectAsTitle = 1,
+    #[doc = "Use attachment filename as title"]
+    UseAttachmentFilenameAsTitle = 2,
+    #[doc = "Do not assign title from rule"]
+    DoNotAssignTitleFromRule = 3,
+}
+
+#[doc = "* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum AttachmentTypeEnum {
+    #[doc = "Only process attachments."]
+    OnlyProcessAttachments = 1,
+    #[doc = "Process all files, including 'inline' attachments."]
+    ProcessAllFilesIncludingInlineAttachments = 2,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -1619,6 +1711,29 @@ pub enum CompressionEnum {
     Lzma,
 }
 
+#[doc = "* `1` - Only process attachments.\n* `2` - Process full Mail (with embedded attachments in file) as .eml\n* `3` - Process full Mail (with embedded attachments in file) as .eml + process attachments as separate documents"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum ConsumptionScopeEnum {
+    #[doc = "Only process attachments."]
+    OnlyProcessAttachments = 1,
+    #[doc = "Process full Mail (with embedded attachments in file) as .eml"]
+    ProcessFullMailWithEmbeddedAttachmentsInFileAsEml = 2,
+    #[doc = "Process full Mail (with embedded attachments in file) as .eml + process attachments as separate documents"]
+    ProcessFullMailWithEmbeddedAttachmentsInFileAsEmlProcessAttachmentsAsSeparateDocuments = 3,
+}
+
 #[doc = "* `archive` - archive\n* `originals` - originals\n* `both` - both"]
 #[derive(
     serde :: Serialize,
@@ -1788,7 +1903,7 @@ pub struct Correspondent {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -1958,7 +2073,7 @@ pub struct CorrespondentRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2768,7 +2883,7 @@ pub struct DocumentType {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -2881,7 +2996,7 @@ pub struct DocumentTypeRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3194,6 +3309,29 @@ impl tabled::Tabled for GroupRequest {
     }
 }
 
+#[doc = "* `1` - No encryption\n* `2` - Use SSL\n* `3` - Use STARTTLS"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum ImapSecurityEnum {
+    #[doc = "No encryption"]
+    NoEncryption = 1,
+    #[doc = "Use SSL"]
+    UseSSL = 2,
+    #[doc = "Use STARTTLS"]
+    UseSTARTTLS = 3,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3288,7 +3426,7 @@ pub struct MailAccount {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     pub username: String,
     pub password: String,
     #[doc = "The character set to use when communicating with the mail server, such as 'UTF-8' or 'US-ASCII'."]
@@ -3300,7 +3438,7 @@ pub struct MailAccount {
     pub owner: Option<i64>,
     pub user_can_change: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
@@ -3430,7 +3568,7 @@ pub struct MailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     pub username: String,
     pub password: String,
     #[doc = "The character set to use when communicating with the mail server, such as 'UTF-8' or 'US-ASCII'."]
@@ -3443,7 +3581,7 @@ pub struct MailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
@@ -3590,15 +3728,15 @@ pub struct MailRule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3609,11 +3747,11 @@ pub struct MailRule {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     pub user_can_change: bool,
@@ -3787,6 +3925,33 @@ impl tabled::Tabled for MailRule {
     }
 }
 
+#[doc = "* `1` - Delete\n* `2` - Move to specified folder\n* `3` - Mark as read, don't process read mails\n* `4` - Flag the mail, don't process flagged mails\n* `5` - Tag the mail with specified tag, don't process tagged mails"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum MailRuleActionEnum {
+    #[doc = "Delete"]
+    Delete = 1,
+    #[doc = "Move to specified folder"]
+    MoveToSpecifiedFolder = 2,
+    #[doc = "Mark as read, don't process read mails"]
+    MarkAsReadDonTProcessReadMails = 3,
+    #[doc = "Flag the mail, don't process flagged mails"]
+    FlagTheMailDonTProcessFlaggedMails = 4,
+    #[doc = "Tag the mail with specified tag, don't process tagged mails"]
+    TagTheMailWithSpecifiedTagDonTProcessTaggedMails = 5,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -3817,15 +3982,15 @@ pub struct MailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3836,11 +4001,11 @@ pub struct MailRuleRequest {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -4015,6 +4180,37 @@ impl tabled::Tabled for MailRuleRequest {
             "set_permissions".into(),
         ]
     }
+}
+
+#[doc = "* `0` - None\n* `1` - Any word\n* `2` - All words\n* `3` - Exact match\n* `4` - Regular expression\n* `5` - Fuzzy word\n* `6` - Automatic"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum MatchingAlgorithm {
+    #[doc = "None"]
+    None = 0,
+    #[doc = "Any word"]
+    AnyWord = 1,
+    #[doc = "All words"]
+    AllWords = 2,
+    #[doc = "Exact match"]
+    ExactMatch = 3,
+    #[doc = "Regular expression"]
+    RegularExpression = 4,
+    #[doc = "Fuzzy word"]
+    FuzzyWord = 5,
+    #[doc = "Automatic"]
+    Automatic = 6,
 }
 
 #[derive(
@@ -6358,7 +6554,7 @@ pub struct PatchedCorrespondentRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6637,7 +6833,7 @@ pub struct PatchedDocumentTypeRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6763,7 +6959,7 @@ pub struct PatchedMailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub imap_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub imap_security: Option<i64>,
+    pub imap_security: Option<ImapSecurityEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6778,7 +6974,7 @@ pub struct PatchedMailAccountRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub set_permissions: Option<SetPermissions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<i64>,
+    pub account_type: Option<AccountTypeEnum>,
     #[doc = "The expiration date of the refresh token. "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expiration: Option<chrono::DateTime<chrono::Utc>>,
@@ -6912,15 +7108,15 @@ pub struct PatchedMailRuleRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_age: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub action: Option<i64>,
+    pub action: Option<MailRuleActionEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub action_parameter: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_title_from: Option<i64>,
+    pub assign_title_from: Option<AssignTitleFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_tags: Option<Vec<Option<i64>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assign_correspondent_from: Option<i64>,
+    pub assign_correspondent_from: Option<AssignCorrespondentFromEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_correspondent: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -6931,11 +7127,11 @@ pub struct PatchedMailRuleRequest {
     pub order: Option<i64>,
     #[doc = "Inline attachments include embedded images, so it's best to combine this option with a filename filter.\n\n* `1` - Only process attachments.\n* `2` - Process all files, including 'inline' attachments."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<i64>,
+    pub attachment_type: Option<AttachmentTypeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub consumption_scope: Option<i64>,
+    pub consumption_scope: Option<ConsumptionScopeEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub pdf_layout: Option<i64>,
+    pub pdf_layout: Option<PdfLayoutEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7334,7 +7530,7 @@ pub struct PatchedStoragePathRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -7421,7 +7617,7 @@ pub struct PatchedTagRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
@@ -7645,7 +7841,7 @@ pub struct PatchedWorkflowActionRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -8013,9 +8209,9 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowTriggerTypeEnum>,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -8025,7 +8221,7 @@ pub struct PatchedWorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -8229,6 +8425,33 @@ impl tabled::Tabled for PatchedWorkflowTriggerRequest {
             "schedule_date_custom_field".into(),
         ]
     }
+}
+
+#[doc = "* `0` - System default\n* `1` - Text, then HTML\n* `2` - HTML, then text\n* `3` - HTML only\n* `4` - Text only"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum PdfLayoutEnum {
+    #[doc = "System default"]
+    SystemDefault = 0,
+    #[doc = "Text, then HTML"]
+    TextThenHTML = 1,
+    #[doc = "HTML, then text"]
+    HtmlThenText = 2,
+    #[doc = "HTML only"]
+    HtmlOnly = 3,
+    #[doc = "Text only"]
+    TextOnly = 4,
 }
 
 #[derive(
@@ -8514,6 +8737,119 @@ impl tabled::Tabled for Profile {
     }
 }
 
+#[doc = "* `0` - title contains\n* `1` - content contains\n* `2` - ASN is\n* `3` - correspondent is\n* `4` - document type is\n* `5` - is in inbox\n* `6` - has tag\n* `7` - has any tag\n* `8` - created before\n* `9` - created after\n* `10` - created year is\n* `11` - created month is\n* `12` - created day is\n* `13` - added before\n* `14` - added after\n* `15` - modified before\n* `16` - modified after\n* `17` - does not have tag\n* `18` - does not have ASN\n* `19` - title or content contains\n* `20` - fulltext query\n* `21` - more like this\n* `22` - has tags in\n* `23` - ASN greater than\n* `24` - ASN less than\n* `25` - storage path is\n* `26` - has correspondent in\n* `27` - does not have correspondent in\n* `28` - has document type in\n* `29` - does not have document type in\n* `30` - has storage path in\n* `31` - does not have storage path in\n* `32` - owner is\n* `33` - has owner in\n* `34` - does not have owner\n* `35` - does not have owner in\n* `36` - has custom field value\n* `37` - is shared by me\n* `38` - has custom fields\n* `39` - has custom field in\n* `40` - does not have custom field in\n* `41` - does not have custom field\n* `42` - custom fields query\n* `43` - created to\n* `44` - created from\n* `45` - added to\n* `46` - added from\n* `47` - mime type is"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum RuleTypeEnum {
+    #[doc = "title contains"]
+    TitleContains = 0,
+    #[doc = "content contains"]
+    ContentContains = 1,
+    #[doc = "ASN is"]
+    AsnIs = 2,
+    #[doc = "correspondent is"]
+    CorrespondentIs = 3,
+    #[doc = "document type is"]
+    DocumentTypeIs = 4,
+    #[doc = "is in inbox"]
+    IsInInbox = 5,
+    #[doc = "has tag"]
+    HasTag = 6,
+    #[doc = "has any tag"]
+    HasAnyTag = 7,
+    #[doc = "created before"]
+    CreatedBefore = 8,
+    #[doc = "created after"]
+    CreatedAfter = 9,
+    #[doc = "created year is"]
+    CreatedYearIs = 10,
+    #[doc = "created month is"]
+    CreatedMonthIs = 11,
+    #[doc = "created day is"]
+    CreatedDayIs = 12,
+    #[doc = "added before"]
+    AddedBefore = 13,
+    #[doc = "added after"]
+    AddedAfter = 14,
+    #[doc = "modified before"]
+    ModifiedBefore = 15,
+    #[doc = "modified after"]
+    ModifiedAfter = 16,
+    #[doc = "does not have tag"]
+    DoesNotHaveTag = 17,
+    #[doc = "does not have ASN"]
+    DoesNotHaveASN = 18,
+    #[doc = "title or content contains"]
+    TitleOrContentContains = 19,
+    #[doc = "fulltext query"]
+    FulltextQuery = 20,
+    #[doc = "more like this"]
+    MoreLikeThis = 21,
+    #[doc = "has tags in"]
+    HasTagsIn = 22,
+    #[doc = "ASN greater than"]
+    AsnGreaterThan = 23,
+    #[doc = "ASN less than"]
+    AsnLessThan = 24,
+    #[doc = "storage path is"]
+    StoragePathIs = 25,
+    #[doc = "has correspondent in"]
+    HasCorrespondentIn = 26,
+    #[doc = "does not have correspondent in"]
+    DoesNotHaveCorrespondentIn = 27,
+    #[doc = "has document type in"]
+    HasDocumentTypeIn = 28,
+    #[doc = "does not have document type in"]
+    DoesNotHaveDocumentTypeIn = 29,
+    #[doc = "has storage path in"]
+    HasStoragePathIn = 30,
+    #[doc = "does not have storage path in"]
+    DoesNotHaveStoragePathIn = 31,
+    #[doc = "owner is"]
+    OwnerIs = 32,
+    #[doc = "has owner in"]
+    HasOwnerIn = 33,
+    #[doc = "does not have owner"]
+    DoesNotHaveOwner = 34,
+    #[doc = "does not have owner in"]
+    DoesNotHaveOwnerIn = 35,
+    #[doc = "has custom field value"]
+    HasCustomFieldValue = 36,
+    #[doc = "is shared by me"]
+    IsSharedByMe = 37,
+    #[doc = "has custom fields"]
+    HasCustomFields = 38,
+    #[doc = "has custom field in"]
+    HasCustomFieldIn = 39,
+    #[doc = "does not have custom field in"]
+    DoesNotHaveCustomFieldIn = 40,
+    #[doc = "does not have custom field"]
+    DoesNotHaveCustomField = 41,
+    #[doc = "custom fields query"]
+    CustomFieldsQuery = 42,
+    #[doc = "created to"]
+    CreatedTo = 43,
+    #[doc = "created from"]
+    CreatedFrom = 44,
+    #[doc = "added to"]
+    AddedTo = 45,
+    #[doc = "added from"]
+    AddedFrom = 46,
+    #[doc = "mime type is"]
+    MimeTypeIs = 47,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -8652,7 +8988,7 @@ impl tabled::Tabled for SavedView {
 )]
 #[allow(non_snake_case)]
 pub struct SavedViewFilterRule {
-    pub rule_type: i64,
+    pub rule_type: RuleTypeEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
@@ -8691,7 +9027,7 @@ impl tabled::Tabled for SavedViewFilterRule {
 )]
 #[allow(non_snake_case)]
 pub struct SavedViewFilterRuleRequest {
-    pub rule_type: i64,
+    pub rule_type: RuleTypeEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
@@ -9177,6 +9513,31 @@ impl tabled::Tabled for SocialAccountRequest {
     }
 }
 
+#[doc = "* `1` - Consume Folder\n* `2` - Api Upload\n* `3` - Mail Fetch\n* `4` - Web UI"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum SourcesEnum {
+    #[doc = "Consume Folder"]
+    ConsumeFolder = 1,
+    #[doc = "Api Upload"]
+    ApiUpload = 2,
+    #[doc = "Mail Fetch"]
+    MailFetch = 3,
+    #[doc = "Web UI"]
+    WebUI = 4,
+}
+
 #[doc = "* `FAILURE` - FAILURE\n* `PENDING` - PENDING\n* `RECEIVED` - RECEIVED\n* `RETRY` - RETRY\n* `REVOKED` - REVOKED\n* `STARTED` - STARTED\n* `SUCCESS` - SUCCESS"]
 #[derive(
     serde :: Serialize,
@@ -9261,7 +9622,7 @@ pub struct StoragePath {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     pub document_count: i64,
@@ -9374,7 +9735,7 @@ pub struct StoragePathRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -9559,7 +9920,7 @@ pub struct Tag {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
@@ -9700,7 +10061,7 @@ pub struct TagRequest {
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<MatchingAlgorithm>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_insensitive: Option<bool>,
     #[doc = "Marks this tag as an inbox tag: All newly consumed documents will be tagged with inbox tags."]
@@ -10631,7 +10992,7 @@ pub struct WorkflowAction {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -11046,7 +11407,7 @@ pub struct WorkflowActionRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-    pub type_: Option<i64>,
+    pub type_: Option<WorkflowActionTypeEnum>,
     #[doc = "Assign a document title, must  be a Jinja2 template, see documentation."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assign_title: Option<String>,
@@ -11335,6 +11696,31 @@ impl tabled::Tabled for WorkflowActionRequest {
     }
 }
 
+#[doc = "* `1` - Assignment\n* `2` - Removal\n* `3` - Email\n* `4` - Webhook"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowActionTypeEnum {
+    #[doc = "Assignment"]
+    Assignment = 1,
+    #[doc = "Removal"]
+    Removal = 2,
+    #[doc = "Email"]
+    Email = 3,
+    #[doc = "Webhook"]
+    Webhook = 4,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -11587,9 +11973,9 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
-    pub type_: i64,
+    pub type_: WorkflowTriggerTypeEnum,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -11599,7 +11985,7 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -11801,6 +12187,35 @@ impl tabled::Tabled for WorkflowTrigger {
     }
 }
 
+#[doc = "* `0` - None\n* `1` - Any word\n* `2` - All words\n* `3` - Exact match\n* `4` - Regular expression\n* `5` - Fuzzy word"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowTriggerMatchingAlgorithmEnum {
+    #[doc = "None"]
+    None = 0,
+    #[doc = "Any word"]
+    AnyWord = 1,
+    #[doc = "All words"]
+    AllWords = 2,
+    #[doc = "Exact match"]
+    ExactMatch = 3,
+    #[doc = "Regular expression"]
+    RegularExpression = 4,
+    #[doc = "Fuzzy word"]
+    FuzzyWord = 5,
+}
+
 #[derive(
     serde :: Serialize, serde :: Deserialize, PartialEq, Debug, Clone, schemars :: JsonSchema,
 )]
@@ -11809,9 +12224,9 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default)]
-    pub sources: Vec<i64>,
+    pub sources: Vec<SourcesEnum>,
     #[serde(rename = "type")]
-    pub type_: i64,
+    pub type_: WorkflowTriggerTypeEnum,
     #[doc = "Only consume documents with a path that matches this if specified. Wildcards specified as * are allowed. Case insensitive."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_path: Option<String>,
@@ -11821,7 +12236,7 @@ pub struct WorkflowTriggerRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub filter_mailrule: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub matching_algorithm: Option<i64>,
+    pub matching_algorithm: Option<WorkflowTriggerMatchingAlgorithmEnum>,
     #[serde(rename = "match", default, skip_serializing_if = "Option::is_none")]
     pub match_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -12021,6 +12436,31 @@ impl tabled::Tabled for WorkflowTriggerRequest {
             "schedule_date_custom_field".into(),
         ]
     }
+}
+
+#[doc = "* `1` - Consumption Started\n* `2` - Document Added\n* `3` - Document Updated\n* `4` - Scheduled"]
+#[derive(
+    serde_repr :: Serialize_repr,
+    serde_repr :: Deserialize_repr,
+    PartialEq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    schemars :: JsonSchema,
+)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+#[cfg_attr(feature = "tabled", derive(tabled::Tabled))]
+#[repr(i64)]
+pub enum WorkflowTriggerTypeEnum {
+    #[doc = "Consumption Started"]
+    ConsumptionStarted = 1,
+    #[doc = "Document Added"]
+    DocumentAdded = 2,
+    #[doc = "Document Updated"]
+    DocumentUpdated = 3,
+    #[doc = "Scheduled"]
+    Scheduled = 4,
 }
 
 #[derive(
