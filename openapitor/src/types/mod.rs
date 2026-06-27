@@ -2073,6 +2073,43 @@ pub fn proper_name(s: &str) -> String {
         .replace("V1", "")
 }
 
+/// Parse enum description lines into a map of integer value -> description.
+/// Format: `* \`1\` - Description text.`
+/// Returns an empty map if parsing fails or no description is provided.
+pub(crate) fn parse_enum_description(desc: &str) -> BTreeMap<i64, String> {
+    let mut result = BTreeMap::new();
+
+    // Split by newlines and parse lines matching `* \`{value}\` - {description}`
+    for line in desc.lines() {
+        let line = line.trim();
+
+        // Match pattern: `* \`{value}\` - {description}`
+        // or: `- \`{value}\` - {description}`
+        let line = line.strip_prefix('*').unwrap_or(line);
+        let line = line.strip_prefix('-').unwrap_or(line);
+        let line = line.trim();
+
+        // Look for the pattern: `1` - description
+        if let Some(rest) = line.strip_prefix('`') {
+            if let Some(end_backtick) = rest.find('`') {
+                let value_str = &rest[..end_backtick];
+                let after_backtick = &rest[end_backtick + 1..];
+                let after_backtick = after_backtick.trim();
+
+                if let Some(after_dash) = after_backtick.strip_prefix('-') {
+                    let description = after_dash.trim();
+
+                    if let Ok(value) = value_str.parse::<i64>() {
+                        result.insert(value, description.to_string());
+                    }
+                }
+            }
+        }
+    }
+
+    result
+}
+
 /// Return the name for a type based on a name if passed or the title of the schema data.
 fn get_type_name(name: &str, data: &openapiv3::SchemaData) -> Result<proc_macro2::Ident> {
     let t = if !name.is_empty() {
