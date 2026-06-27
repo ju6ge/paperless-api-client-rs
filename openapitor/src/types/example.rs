@@ -598,12 +598,18 @@ pub fn generate_example_rust_from_schema(
             // Make sure we have a reference for our type.
             if let Some(ref s) = a.items {
                 let items = s.get_schema_from_reference(&type_space.spec, true)?;
+                let item_nullable = items.schema_data.nullable;
                 let item_example = generate_example_rust_from_schema(
                     type_space,
                     name.trim_start_matches("Vec").trim_end_matches('>'),
                     &items,
                     in_crate,
                 )?;
+                let item_example = if item_nullable {
+                    quote!(Some(#item_example))
+                } else {
+                    item_example
+                };
                 quote!(vec![#item_example])
             } else {
                 // We have no items.
