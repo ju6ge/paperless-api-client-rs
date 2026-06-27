@@ -1030,6 +1030,19 @@ impl TypeSpace {
         Ok(())
     }
 
+    /// Render an integer type, dispatching to enum rendering if applicable.
+    fn render_integer_type(
+        &mut self,
+        name: &str,
+        i: &openapiv3::IntegerType,
+        data: &openapiv3::SchemaData,
+    ) -> Result<()> {
+        if !i.enumeration.is_empty() {
+            return self.render_enum_from_integers(name, i, data);
+        }
+        Ok(())
+    }
+
     /// Render the full type for an enum.
     fn render_enum(
         &mut self,
