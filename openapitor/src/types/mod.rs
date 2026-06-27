@@ -1645,7 +1645,9 @@ pub fn get_type_name_for_schema(
             get_type_name_for_string(name, s, &schema.schema_data, in_crate)?
         }
         SchemaKind::Type(openapiv3::Type::Number(n)) => get_type_name_for_number(n)?,
-        SchemaKind::Type(openapiv3::Type::Integer(i)) => get_type_name_for_integer(i)?,
+        SchemaKind::Type(openapiv3::Type::Integer(i)) => {
+            get_type_name_for_integer(name, i, &schema.schema_data, in_crate)?
+        }
         SchemaKind::Type(openapiv3::Type::Object(o)) => {
             get_type_name_for_object(name, o, &schema.schema_data, spec, in_crate)?
         }
@@ -1837,7 +1839,24 @@ fn get_type_name_for_number(n: &openapiv3::NumberType) -> Result<proc_macro2::To
 }
 
 /// Get the type name for an integer type.
-fn get_type_name_for_integer(i: &openapiv3::IntegerType) -> Result<proc_macro2::TokenStream> {
+fn get_type_name_for_integer(
+    name: &str,
+    i: &openapiv3::IntegerType,
+    data: &openapiv3::SchemaData,
+    in_crate: bool,
+) -> Result<proc_macro2::TokenStream> {
+    if !i.enumeration.is_empty() {
+        // We have an enum type.
+        // Get the name for the enum.
+        let ident = get_type_name(name, data)?;
+        let t = if in_crate {
+            quote!(#ident)
+        } else {
+            quote!(crate::types::#ident)
+        };
+        return Ok(t);
+    }
+
     let t = match &i.format {
         openapiv3::VariantOrUnknownOrEmpty::Item(openapiv3::IntegerFormat::Int32) => {
             quote!(i32)
